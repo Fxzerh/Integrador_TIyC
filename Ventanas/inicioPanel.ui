@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Inicio</class>
+ <widget class="QWidget" name="Inicio">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="5" column="1">
+    <widget class="QPushButton" name="addError1_btn">
+     <property name="maximumSize">
+      <size>
+       <width>1100</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Introducir 1 Error</string>
+     </property>
+     <property name="autoDefault">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="showFiles_btn_2">
+     <property name="maximumSize">
+      <size>
+       <width>1100</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Visualizar Textos</string>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="compact_btn">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>1000</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="sizeIncrement">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Compactar</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="menuLabel">
+     <property name="maximumSize">
+      <size>
+       <width>400</width>
+       <height>65</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>40</pointsize>
+       <bold>true</bold>
+       <hintingpreference>PreferNoHinting</hintingpreference>
+      </font>
+     </property>
+     <property name="text">
+      <string>Menu</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="protect_btn">
+     <property name="maximumSize">
+      <size>
+       <width>1100</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Proteger Archivos</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="decompact_btn">
+     <property name="maximumSize">
+      <size>
+       <width>1100</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Descompactar</string>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QPushButton" name="addError2_btn">
+     <property name="maximumSize">
+      <size>
+       <width>1100</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Introducir 2 Errores</string>
+     </property>
+     <property name="autoDefault">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
