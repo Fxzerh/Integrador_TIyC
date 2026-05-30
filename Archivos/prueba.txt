@@ -1,0 +1,3 @@
+Hola como andamos. Esta es una prueba para ver como esta funcionando el programa de huffman para la compactacion y descompactacion de una archivo.
+La idea es que tome este archivo y lo compacte, ver como se ve el archivo compactado en cuanto a contenido y luego descompactar el archivo comprimido para asi recuperar el texto original. Al descompactar nos debe generar un nuevo archivo el cual tiene el texto ya descompactado para de esta forma poder ver si se realizo la descompactacion de manera correcta, para esto comparamos el archivo original con el archivo generado al descompactar y deberian ser exactamente iguales (tanto en contenido como en tamaño)
+En fin, eso seria todo. Ahora a probar si el programa funciona bien o no!!! :)
