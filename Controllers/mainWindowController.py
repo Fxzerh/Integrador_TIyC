@@ -1,9 +1,14 @@
-from PyQt6.QtWidgets import QMainWindow, QStackedWidget
+from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import uic
+
 # Importamos todos los controladores
 from Controllers.inicioController import InicioController
-
-
+from Controllers.compactarController import CompactarController
+from Controllers.descompactarController import DescompactarController
+from Controllers.verTextosController import VerTextosController
+from Controllers.protegerController import ProtegerController
+from Controllers.insertarError1Controller import InsertarError1Controller
+from Controllers.insertarError2Controller import InsertarError2Controller
 
 
 class MainWindow(QMainWindow):
@@ -12,20 +17,17 @@ class MainWindow(QMainWindow):
         uic.loadUi("Ventanas/mainWindow.ui", self)
         self.setWindowTitle("PM 2: Huffman")
 
-        self.stackedWidget = QStackedWidget()      # Creamos el StackedWidget
-        self.setCentralWidget(self.stackedWidget)  # Al StackedWidget no ponemos como principal de la ventana principal
+        # Vinculamos cada QWidget (panel) del stackedWidget a su controlador
+        self.inicioController = InicioController(self.inicioPanel)          # Con self hacemos que puedan acceder a MainWindow
+        self.compactarController = CompactarController(self.compactarPanel)
+        self.descompactarController = DescompactarController(self.descompactarPanel)
+        self.verTextosController = VerTextosController(self.verTextosPanel)
+        self.protegerController = ProtegerController(self.protegerPanel)
+        self.insertarError1Controller = InsertarError1Controller(self.insertarError1Panel)
+        self.insertarError2Controller = InsertarError2Controller(self.insertarError2Panel)
 
-        # Instanciamos los controladores
-        self.inicioController = InicioController(self)      # Con self hacemos que puedan acceder a MainWindow
+        self.stackedWidget.setCurrentIndex(0)      # Mostramos el panel de inicio al iniciar la aplicación
         
-
-        # Añadimos el controlador al StackedWidget
-        self.stackedWidget.addWidget(self.inicioController)         # Indice 0
-        
-
-
-        self.stackedWidget.setCurrentWidget(self.inicioController)      # Mostramos el panel_inicio al iniciar la aplicación, se puede cambiar a otro panel usando setCurrentWidget() con el panel deseado
-
     def cambiar_pantalla(self, indice):
         self.stackedWidget.setCurrentIndex(indice)
 

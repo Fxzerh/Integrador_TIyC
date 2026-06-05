@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6 import uic
 
-class InicioController(QWidget):
-    def __init__(self, vista_inicio):
+class InsertarError2Controller(QWidget):
+    def __init__(self, vista_insertarError2):
         super().__init__()
-        #uic.loadUi("Ventanas/inicioPanel.ui", self)
-        self.vista = vista_inicio
+        #uic.loadUi("Ventanas/insertarError2Panel.ui", self)
+        self.vista = vista_insertarError2
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         #self.loadFile_btn.clicked.connect(lambda: self.cambiarPanel(1))     # Cambia al panel de carga de archivos, el indice 1 es el loadFilePanel
