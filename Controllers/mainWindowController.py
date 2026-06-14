@@ -28,6 +28,16 @@ class MainWindow(QMainWindow):
         self.insertarErrorController = InsertarErrorController(self)     # Indice 5
         self.desprotegerController = DesprotegerController(self)           # Indice 6  
 
+        self.controladores = [
+            self.inicioController,         # Índice 0
+            self.compactarController,      # Índice 1
+            self.descompactarController,   # Índice 2
+            self.verTextosController,      # Índice 3
+            self.protegerController,       # Índice 4
+            self.insertarErrorController,  # Índice 5
+            self.desprotegerController     # Índice 6
+        ]
+
         self.stackedWidget.setCurrentIndex(0)      # Mostramos el panel de inicio al iniciar la aplicación
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
@@ -42,5 +52,7 @@ class MainWindow(QMainWindow):
         
     def cambiar_pantalla(self, indice):
         self.stackedWidget.setCurrentIndex(indice)
+        if hasattr(self.controladores[indice], 'refrescarPanel'):
+            self.controladores[indice].refrescarPanel()
 
 

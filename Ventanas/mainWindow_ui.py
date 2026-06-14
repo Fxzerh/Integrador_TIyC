@@ -270,31 +270,28 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.compactarArchivo_btn, 6, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        self.tableWidgetC = QTableWidget(self.compactarPanel)
-        if (self.tableWidgetC.columnCount() < 3):
-            self.tableWidgetC.setColumnCount(3)
+        self.tableFileC = QTableWidget(self.compactarPanel)
+        if (self.tableFileC.columnCount() < 2):
+            self.tableFileC.setColumnCount(2)
         font8 = QFont()
         font8.setFamilies([u"Yu Gothic UI"])
         font8.setBold(True)
         __qtablewidgetitem = QTableWidgetItem()
         __qtablewidgetitem.setFont(font8)
-        self.tableWidgetC.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        self.tableFileC.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
         __qtablewidgetitem1.setFont(font8)
-        self.tableWidgetC.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        __qtablewidgetitem2 = QTableWidgetItem()
-        __qtablewidgetitem2.setFont(font8)
-        self.tableWidgetC.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        self.tableWidgetC.setObjectName(u"tableWidgetC")
-        self.tableWidgetC.horizontalHeader().setStretchLastSection(True)
+        self.tableFileC.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        self.tableFileC.setObjectName(u"tableFileC")
+        self.tableFileC.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_3.addWidget(self.tableWidgetC, 4, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.tableFileC, 4, 0, 1, 1)
 
-        self.webEngineViewC = QWebEngineView(self.compactarPanel)
-        self.webEngineViewC.setObjectName(u"webEngineViewC")
-        self.webEngineViewC.setUrl(QUrl(u"about:blank"))
+        self.viewC = QWebEngineView(self.compactarPanel)
+        self.viewC.setObjectName(u"viewC")
+        self.viewC.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_3.addWidget(self.webEngineViewC, 4, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.viewC, 4, 2, 1, 1)
 
         self.label_2 = QLabel(self.compactarPanel)
         self.label_2.setObjectName(u"label_2")
@@ -338,11 +335,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addItem(self.verticalSpacer_6, 4, 0, 1, 3)
 
-        self.webEngineViewDC = QWebEngineView(self.descompactarPanel)
-        self.webEngineViewDC.setObjectName(u"webEngineViewDC")
-        self.webEngineViewDC.setUrl(QUrl(u"about:blank"))
+        self.viewDC = QWebEngineView(self.descompactarPanel)
+        self.viewDC.setObjectName(u"viewDC")
+        self.viewDC.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_4.addWidget(self.webEngineViewDC, 3, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.viewDC, 3, 2, 1, 1)
 
         self.label_5 = QLabel(self.descompactarPanel)
         self.label_5.setObjectName(u"label_5")
@@ -364,27 +361,24 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.subirArchivoDC_btn, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        self.tableWidgetDC = QTableWidget(self.descompactarPanel)
-        if (self.tableWidgetDC.columnCount() < 3):
-            self.tableWidgetDC.setColumnCount(3)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        __qtablewidgetitem3.setFont(font8)
-        self.tableWidgetDC.setHorizontalHeaderItem(0, __qtablewidgetitem3)
-        __qtablewidgetitem4 = QTableWidgetItem()
-        __qtablewidgetitem4.setFont(font8)
-        self.tableWidgetDC.setHorizontalHeaderItem(1, __qtablewidgetitem4)
+        self.tableFileDC = QTableWidget(self.descompactarPanel)
+        if (self.tableFileDC.columnCount() < 2):
+            self.tableFileDC.setColumnCount(2)
+        __qtablewidgetitem2 = QTableWidgetItem()
+        __qtablewidgetitem2.setFont(font8)
+        self.tableFileDC.setHorizontalHeaderItem(0, __qtablewidgetitem2)
         font10 = QFont()
         font10.setFamilies([u"Yu Gothic UI"])
         font10.setBold(True)
         font10.setKerning(True)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        __qtablewidgetitem5.setFont(font10)
-        self.tableWidgetDC.setHorizontalHeaderItem(2, __qtablewidgetitem5)
-        self.tableWidgetDC.setObjectName(u"tableWidgetDC")
-        self.tableWidgetDC.horizontalHeader().setProperty(u"showSortIndicator", False)
-        self.tableWidgetDC.horizontalHeader().setStretchLastSection(True)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        __qtablewidgetitem3.setFont(font10)
+        self.tableFileDC.setHorizontalHeaderItem(1, __qtablewidgetitem3)
+        self.tableFileDC.setObjectName(u"tableFileDC")
+        self.tableFileDC.horizontalHeader().setProperty(u"showSortIndicator", False)
+        self.tableFileDC.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_4.addWidget(self.tableWidgetDC, 3, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.tableFileDC, 3, 0, 1, 1)
 
         self.label_6 = QLabel(self.descompactarPanel)
         self.label_6.setObjectName(u"label_6")
@@ -417,11 +411,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addItem(self.verticalSpacer_9, 4, 2, 1, 1)
 
-        self.webEngineViewVT_R = QWebEngineView(self.verTextosPanel)
-        self.webEngineViewVT_R.setObjectName(u"webEngineViewVT_R")
-        self.webEngineViewVT_R.setUrl(QUrl(u"about:blank"))
+        self.viewVT_R = QWebEngineView(self.verTextosPanel)
+        self.viewVT_R.setObjectName(u"viewVT_R")
+        self.viewVT_R.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_5.addWidget(self.webEngineViewVT_R, 5, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.viewVT_R, 5, 2, 1, 1)
 
         self.label_10 = QLabel(self.verTextosPanel)
         self.label_10.setObjectName(u"label_10")
@@ -440,11 +434,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addItem(self.horizontalSpacer_4, 3, 1, 1, 1)
 
-        self.webEngineViewVT_O = QWebEngineView(self.verTextosPanel)
-        self.webEngineViewVT_O.setObjectName(u"webEngineViewVT_O")
-        self.webEngineViewVT_O.setUrl(QUrl(u"about:blank"))
+        self.viewVT_O = QWebEngineView(self.verTextosPanel)
+        self.viewVT_O.setObjectName(u"viewVT_O")
+        self.viewVT_O.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_5.addWidget(self.webEngineViewVT_O, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.viewVT_O, 3, 2, 1, 1)
 
         self.label_9 = QLabel(self.verTextosPanel)
         self.label_9.setObjectName(u"label_9")
@@ -452,22 +446,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.label_9, 2, 0, 1, 1)
 
-        self.tableWidgetVT = QTableWidget(self.verTextosPanel)
-        if (self.tableWidgetVT.columnCount() < 3):
-            self.tableWidgetVT.setColumnCount(3)
-        __qtablewidgetitem6 = QTableWidgetItem()
-        __qtablewidgetitem6.setFont(font8)
-        self.tableWidgetVT.setHorizontalHeaderItem(0, __qtablewidgetitem6)
-        __qtablewidgetitem7 = QTableWidgetItem()
-        __qtablewidgetitem7.setFont(font8)
-        self.tableWidgetVT.setHorizontalHeaderItem(1, __qtablewidgetitem7)
-        __qtablewidgetitem8 = QTableWidgetItem()
-        __qtablewidgetitem8.setFont(font8)
-        self.tableWidgetVT.setHorizontalHeaderItem(2, __qtablewidgetitem8)
-        self.tableWidgetVT.setObjectName(u"tableWidgetVT")
-        self.tableWidgetVT.horizontalHeader().setStretchLastSection(True)
+        self.tableFileVT = QTableWidget(self.verTextosPanel)
+        if (self.tableFileVT.columnCount() < 2):
+            self.tableFileVT.setColumnCount(2)
+        __qtablewidgetitem4 = QTableWidgetItem()
+        __qtablewidgetitem4.setFont(font8)
+        self.tableFileVT.setHorizontalHeaderItem(0, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        __qtablewidgetitem5.setFont(font8)
+        self.tableFileVT.setHorizontalHeaderItem(1, __qtablewidgetitem5)
+        self.tableFileVT.setObjectName(u"tableFileVT")
+        self.tableFileVT.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_5.addWidget(self.tableWidgetVT, 3, 0, 3, 1)
+        self.gridLayout_5.addWidget(self.tableFileVT, 3, 0, 3, 1)
 
         self.verticalSpacer_14 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -475,8 +466,8 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.setRowStretch(3, 2)
         self.gridLayout_5.setRowStretch(5, 2)
-        self.gridLayout_5.setColumnStretch(0, 1)
-        self.gridLayout_5.setColumnStretch(2, 2)
+        self.gridLayout_5.setColumnStretch(0, 2)
+        self.gridLayout_5.setColumnStretch(2, 3)
         self.stackedWidget.addWidget(self.verTextosPanel)
         self.protegerPanel = QWidget()
         self.protegerPanel.setObjectName(u"protegerPanel")
@@ -514,23 +505,20 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.hamming1024_btn, 7, 3, 1, 1)
 
-        self.tableWidgetP = QTableWidget(self.protegerPanel)
-        if (self.tableWidgetP.columnCount() < 3):
-            self.tableWidgetP.setColumnCount(3)
-        __qtablewidgetitem9 = QTableWidgetItem()
-        __qtablewidgetitem9.setFont(font8)
-        self.tableWidgetP.setHorizontalHeaderItem(0, __qtablewidgetitem9)
-        __qtablewidgetitem10 = QTableWidgetItem()
-        __qtablewidgetitem10.setFont(font8)
-        self.tableWidgetP.setHorizontalHeaderItem(1, __qtablewidgetitem10)
-        __qtablewidgetitem11 = QTableWidgetItem()
-        __qtablewidgetitem11.setFont(font8)
-        self.tableWidgetP.setHorizontalHeaderItem(2, __qtablewidgetitem11)
-        self.tableWidgetP.setObjectName(u"tableWidgetP")
-        self.tableWidgetP.horizontalHeader().setStretchLastSection(True)
-        self.tableWidgetP.verticalHeader().setCascadingSectionResizes(False)
+        self.tableFileP = QTableWidget(self.protegerPanel)
+        if (self.tableFileP.columnCount() < 2):
+            self.tableFileP.setColumnCount(2)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        __qtablewidgetitem6.setFont(font8)
+        self.tableFileP.setHorizontalHeaderItem(0, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        __qtablewidgetitem7.setFont(font8)
+        self.tableFileP.setHorizontalHeaderItem(1, __qtablewidgetitem7)
+        self.tableFileP.setObjectName(u"tableFileP")
+        self.tableFileP.horizontalHeader().setStretchLastSection(False)
+        self.tableFileP.verticalHeader().setCascadingSectionResizes(False)
 
-        self.gridLayout_6.addWidget(self.tableWidgetP, 5, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.tableFileP, 5, 0, 1, 1)
 
         self.horizontalSpacer_5 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
@@ -542,11 +530,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.label_12, 4, 0, 1, 1)
 
-        self.webEngineViewP = QWebEngineView(self.protegerPanel)
-        self.webEngineViewP.setObjectName(u"webEngineViewP")
-        self.webEngineViewP.setUrl(QUrl(u"about:blank"))
+        self.viewP = QWebEngineView(self.protegerPanel)
+        self.viewP.setObjectName(u"viewP")
+        self.viewP.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_6.addWidget(self.webEngineViewP, 5, 2, 1, 3)
+        self.gridLayout_6.addWidget(self.viewP, 5, 2, 1, 3)
 
         self.label_11 = QLabel(self.protegerPanel)
         self.label_11.setObjectName(u"label_11")
@@ -606,22 +594,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.insertar2Errores_btn, 5, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        self.tableWidgetIE = QTableWidget(self.insertarErrorPanel)
-        if (self.tableWidgetIE.columnCount() < 3):
-            self.tableWidgetIE.setColumnCount(3)
-        __qtablewidgetitem12 = QTableWidgetItem()
-        __qtablewidgetitem12.setFont(font8)
-        self.tableWidgetIE.setHorizontalHeaderItem(0, __qtablewidgetitem12)
-        __qtablewidgetitem13 = QTableWidgetItem()
-        __qtablewidgetitem13.setFont(font8)
-        self.tableWidgetIE.setHorizontalHeaderItem(1, __qtablewidgetitem13)
-        __qtablewidgetitem14 = QTableWidgetItem()
-        __qtablewidgetitem14.setFont(font8)
-        self.tableWidgetIE.setHorizontalHeaderItem(2, __qtablewidgetitem14)
-        self.tableWidgetIE.setObjectName(u"tableWidgetIE")
-        self.tableWidgetIE.horizontalHeader().setStretchLastSection(True)
+        self.tableFileIE = QTableWidget(self.insertarErrorPanel)
+        if (self.tableFileIE.columnCount() < 2):
+            self.tableFileIE.setColumnCount(2)
+        __qtablewidgetitem8 = QTableWidgetItem()
+        __qtablewidgetitem8.setFont(font8)
+        self.tableFileIE.setHorizontalHeaderItem(0, __qtablewidgetitem8)
+        __qtablewidgetitem9 = QTableWidgetItem()
+        __qtablewidgetitem9.setFont(font8)
+        self.tableFileIE.setHorizontalHeaderItem(1, __qtablewidgetitem9)
+        self.tableFileIE.setObjectName(u"tableFileIE")
+        self.tableFileIE.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_7.addWidget(self.tableWidgetIE, 3, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.tableFileIE, 3, 0, 1, 1)
 
         self.horizontalSpacer_7 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
@@ -643,11 +628,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addItem(self.verticalSpacer_12, 1, 0, 1, 4)
 
-        self.webEngineViewIE = QWebEngineView(self.insertarErrorPanel)
-        self.webEngineViewIE.setObjectName(u"webEngineViewIE")
-        self.webEngineViewIE.setUrl(QUrl(u"about:blank"))
+        self.viewIE = QWebEngineView(self.insertarErrorPanel)
+        self.viewIE.setObjectName(u"viewIE")
+        self.viewIE.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_7.addWidget(self.webEngineViewIE, 3, 2, 1, 2)
+        self.gridLayout_7.addWidget(self.viewIE, 3, 2, 1, 2)
 
         self.verticalSpacer_13 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -655,7 +640,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.setRowStretch(3, 3)
         self.gridLayout_7.setRowStretch(5, 2)
-        self.gridLayout_7.setColumnStretch(0, 2)
+        self.gridLayout_7.setColumnStretch(0, 3)
         self.gridLayout_7.setColumnStretch(2, 2)
         self.gridLayout_7.setColumnStretch(3, 2)
         self.stackedWidget.addWidget(self.insertarErrorPanel)
@@ -682,22 +667,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_8.addWidget(self.subirArchivoDP_btn, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
-        self.tableWidgetDP = QTableWidget(self.desprotegerPanel)
-        if (self.tableWidgetDP.columnCount() < 3):
-            self.tableWidgetDP.setColumnCount(3)
-        __qtablewidgetitem15 = QTableWidgetItem()
-        __qtablewidgetitem15.setFont(font8)
-        self.tableWidgetDP.setHorizontalHeaderItem(0, __qtablewidgetitem15)
-        __qtablewidgetitem16 = QTableWidgetItem()
-        __qtablewidgetitem16.setFont(font8)
-        self.tableWidgetDP.setHorizontalHeaderItem(1, __qtablewidgetitem16)
-        __qtablewidgetitem17 = QTableWidgetItem()
-        __qtablewidgetitem17.setFont(font8)
-        self.tableWidgetDP.setHorizontalHeaderItem(2, __qtablewidgetitem17)
-        self.tableWidgetDP.setObjectName(u"tableWidgetDP")
-        self.tableWidgetDP.horizontalHeader().setStretchLastSection(True)
+        self.tableFileDP = QTableWidget(self.desprotegerPanel)
+        if (self.tableFileDP.columnCount() < 2):
+            self.tableFileDP.setColumnCount(2)
+        __qtablewidgetitem10 = QTableWidgetItem()
+        __qtablewidgetitem10.setFont(font8)
+        self.tableFileDP.setHorizontalHeaderItem(0, __qtablewidgetitem10)
+        __qtablewidgetitem11 = QTableWidgetItem()
+        __qtablewidgetitem11.setFont(font8)
+        self.tableFileDP.setHorizontalHeaderItem(1, __qtablewidgetitem11)
+        self.tableFileDP.setObjectName(u"tableFileDP")
+        self.tableFileDP.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_8.addWidget(self.tableWidgetDP, 3, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.tableFileDP, 3, 0, 1, 1)
 
         self.label_19 = QLabel(self.desprotegerPanel)
         self.label_19.setObjectName(u"label_19")
@@ -705,11 +687,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_8.addWidget(self.label_19, 2, 2, 1, 1)
 
-        self.webEngineViewDP = QWebEngineView(self.desprotegerPanel)
-        self.webEngineViewDP.setObjectName(u"webEngineViewDP")
-        self.webEngineViewDP.setUrl(QUrl(u"about:blank"))
+        self.viewDP = QWebEngineView(self.desprotegerPanel)
+        self.viewDP.setObjectName(u"viewDP")
+        self.viewDP.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_8.addWidget(self.webEngineViewDP, 3, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.viewDP, 3, 2, 1, 1)
 
         self.label_17 = QLabel(self.desprotegerPanel)
         self.label_17.setObjectName(u"label_17")
@@ -744,7 +726,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -771,44 +753,36 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a compactar:", None))
         self.subirArchivoC_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.compactarArchivo_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar Archivo", None))
-        ___qtablewidgetitem = self.tableWidgetC.horizontalHeaderItem(0)
+        ___qtablewidgetitem = self.tableFileC.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem1 = self.tableWidgetC.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem2 = self.tableWidgetC.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem1 = self.tableFileC.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Compactar Archivo", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
         self.descompactarArchivo_btn.setText(QCoreApplication.translate("MainWindow", u"Descompactar Archivo", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Descompactar Archivo", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
         self.subirArchivoDC_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
-        ___qtablewidgetitem3 = self.tableWidgetDC.horizontalHeaderItem(0)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem4 = self.tableWidgetDC.horizontalHeaderItem(1)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem5 = self.tableWidgetDC.horizontalHeaderItem(2)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem2 = self.tableFileDC.horizontalHeaderItem(0)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem3 = self.tableFileDC.horizontalHeaderItem(1)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a descompactar:", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Contenidos:", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Seleccione un archivo:", None))
-        ___qtablewidgetitem6 = self.tableWidgetVT.horizontalHeaderItem(0)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem7 = self.tableWidgetVT.horizontalHeaderItem(1)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem8 = self.tableWidgetVT.horizontalHeaderItem(2)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem4 = self.tableFileVT.horizontalHeaderItem(0)
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem5 = self.tableFileVT.horizontalHeaderItem(1)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.subirArchivoP_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
         self.hamming16384_btn.setText(QCoreApplication.translate("MainWindow", u"Modulo 16384", None))
         self.hamming1024_btn.setText(QCoreApplication.translate("MainWindow", u"Modulo 1024", None))
-        ___qtablewidgetitem9 = self.tableWidgetP.horizontalHeaderItem(0)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem10 = self.tableWidgetP.horizontalHeaderItem(1)
-        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem11 = self.tableWidgetP.horizontalHeaderItem(2)
-        ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem6 = self.tableFileP.horizontalHeaderItem(0)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem7 = self.tableFileP.horizontalHeaderItem(1)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a proteger:", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivo", None))
         self.hamming8_btn.setText(QCoreApplication.translate("MainWindow", u"Modulo 8", None))
@@ -816,22 +790,18 @@ class Ui_MainWindow(object):
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"Insertar Error al Archivo", None))
         self.subirArchivoIE_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.insertar2Errores_btn.setText(QCoreApplication.translate("MainWindow", u"Insertar 2 errores", None))
-        ___qtablewidgetitem12 = self.tableWidgetIE.horizontalHeaderItem(0)
-        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem13 = self.tableWidgetIE.horizontalHeaderItem(1)
-        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem14 = self.tableWidgetIE.horizontalHeaderItem(2)
-        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem8 = self.tableFileIE.horizontalHeaderItem(0)
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem9 = self.tableFileIE.horizontalHeaderItem(1)
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a insertar error:", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
         self.desprotegerArchivo_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo", None))
         self.subirArchivoDP_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
-        ___qtablewidgetitem15 = self.tableWidgetDP.horizontalHeaderItem(0)
-        ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem16 = self.tableWidgetDP.horizontalHeaderItem(1)
-        ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"Tipo", None))
-        ___qtablewidgetitem17 = self.tableWidgetDP.horizontalHeaderItem(2)
-        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem10 = self.tableFileDP.horizontalHeaderItem(0)
+        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem11 = self.tableFileDP.horizontalHeaderItem(1)
+        ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_19.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
         self.label_17.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo", None))
         self.label_18.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a desproteger:", None))

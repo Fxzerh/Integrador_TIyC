@@ -1,19 +1,61 @@
-from PyQt6.QtWidgets import QWidget
-from PyQt6 import uic
+from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
+from Clases.cargarArchivo import Cargar
+import os
+
 
 class InsertarErrorController:
     def __init__(self, mainWindow):
         super().__init__()
-        #uic.loadUi("Ventanas/insertarErrorPanel.ui", self)
         self.mainWindow = mainWindow
+        self.cargar = Cargar()
+        self.directorioBase = os.path.dirname(os.path.abspath(__file__))            # Directorio Actual
+        self.carpetaArchivos = os.path.join(self.directorioBase, "..", "Archivos")  # Carpeta donde se guardan los archivos
 
+        # ---------- SETEOS INICIALES ---------------------------------------------------------------------------------------------------------
+        try:
+            self.mainWindow.tableFileIE.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)   # Para que la columna ocupe el espacio libre
+            self.mainWindow.tableFileIE.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)  # Para que se selecciones la fila completa
+            self.mainWindow.tableFileIE.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)    # Para que permita seleccionar una fila a la vez
+            self.mainWindow.tableFileIE.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)      # Para que no permita editar las celdas
+            self.mainWindow.tableFileIE.setRowCount(0)  # Limpiar la tabla antes de cargar los datos
+            self.cargarTabla()          # Cargamos la tabla
+        except Exception as e:
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo cargar la tabla: {str(e)}")
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
-        #self.loadFile_btn.clicked.connect(lambda: self.cambiarPanel(1))     # Cambia al panel de carga de archivos, el indice 1 es el loadFilePanel
-        #self.compactFile_btn.clicked.connect(lambda: self.cambiarPanel(2))    # Cambia al panel de codificacion, el indice 2 es el compactFilePanel
-        #self.decompactFile_btn.clicked.connect(lambda: self.cambiarPanel(3))      # Cambia al panel de añadir error, el indice 3 es el decompactFilePanel
-        #self.showFiles_btn.clicked.connect(lambda: self.cambiarPanel(4))   # Cambia al panel de decodificacion y correccion, el indice 4 es el showFilePanel
-        #self.estadisticas_btn.clicked.connect(lambda: self.cambiarPanel(5))     # Cambia al panel de decodificacion sin correccion, el indice 5 es el estaditicasPanel
+        self.mainWindow.subirArchivoIE_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
+        
+
     
     def cambiarPanel (self, indice):
         self.mainWindow.cambiar_pantalla(indice)
+
+    def refrescarPanel(self):
+        self.mainWindow.tableFileIE.setRowCount(0)
+        self.cargarTabla()
+        #self.textFileO.clear()
+        #self.textFileC.clear()
+
+    def cargarTabla(self):
+        if os.path.exists(self.carpetaArchivos):
+            files = os.listdir(self.carpetaArchivos)
+            for f in files:
+                fileType = os.path.splitext(f)[1]
+                file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
+                if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
+                    # Obtenemos el tamaño de f
+                    tamaño = os.path.getsize(file_path)
+
+                    # Convertir tamaño a formato B, KB o MB
+                    if tamaño < 1024:
+                        tamaño_str = f"{tamaño} B"
+                    elif tamaño < 1024 * 1024:
+                        tamaño_str = f"{tamaño / 1024:.2f} KB"
+                    else:
+                        tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
+                    
+                    # Agregamos el archivo a la tabla
+                    rowPosition = self.mainWindow.tableFileIE.rowCount()
+                    self.mainWindow.tableFileIE.insertRow(rowPosition)
+                    self.mainWindow.tableFileIE.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
+                    self.mainWindow.tableFileIE.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño

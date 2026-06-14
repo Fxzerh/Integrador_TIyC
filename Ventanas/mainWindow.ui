@@ -213,7 +213,7 @@ QPushButton:hover{
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="inicioPanel">
        <property name="styleSheet">
@@ -525,24 +525,13 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QTableWidget" name="tableWidgetC">
+         <widget class="QTableWidget" name="tableFileC">
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -565,7 +554,7 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QWebEngineView" name="webEngineViewC">
+         <widget class="QWebEngineView" name="viewC">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -685,7 +674,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="3" column="2">
-         <widget class="QWebEngineView" name="webEngineViewDC">
+         <widget class="QWebEngineView" name="viewDC">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -746,27 +735,16 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QTableWidget" name="tableWidgetDC">
+         <widget class="QTableWidget" name="tableFileDC">
           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
            <bool>false</bool>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -844,7 +822,7 @@ QPushButton:hover{
          <family>Segoe UI Black</family>
         </font>
        </property>
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,0,2,0,2" columnstretch="1,0,2">
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,0,2,0,2" columnstretch="2,0,3">
         <property name="leftMargin">
          <number>15</number>
         </property>
@@ -874,7 +852,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="5" column="2">
-         <widget class="QWebEngineView" name="webEngineViewVT_R">
+         <widget class="QWebEngineView" name="viewVT_R">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -932,7 +910,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="3" column="2">
-         <widget class="QWebEngineView" name="webEngineViewVT_O">
+         <widget class="QWebEngineView" name="viewVT_O">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -956,24 +934,13 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="0" rowspan="3">
-         <widget class="QTableWidget" name="tableWidgetVT">
+         <widget class="QTableWidget" name="tableFileVT">
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -1116,9 +1083,9 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QTableWidget" name="tableWidgetP">
+         <widget class="QTableWidget" name="tableFileP">
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <attribute name="verticalHeaderCascadingSectionResizes">
            <bool>false</bool>
@@ -1126,17 +1093,6 @@ QPushButton:hover{
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -1190,7 +1146,7 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="5" column="2" colspan="3">
-         <widget class="QWebEngineView" name="webEngineViewP">
+         <widget class="QWebEngineView" name="viewP">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -1254,7 +1210,7 @@ QPushButton:hover{
        </layout>
       </widget>
       <widget class="QWidget" name="insertarErrorPanel">
-       <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,3,0,2" columnstretch="2,0,2,2">
+       <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,3,0,2" columnstretch="3,0,2,2">
         <property name="leftMargin">
          <number>15</number>
         </property>
@@ -1343,24 +1299,13 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QTableWidget" name="tableWidgetIE">
+         <widget class="QTableWidget" name="tableFileIE">
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -1445,7 +1390,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="3" column="2" colspan="2">
-         <widget class="QWebEngineView" name="webEngineViewIE">
+         <widget class="QWebEngineView" name="viewIE">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -1540,24 +1485,13 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QTableWidget" name="tableWidgetDP">
+         <widget class="QTableWidget" name="tableFileDP">
           <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string>Archivo</string>
-           </property>
-           <property name="font">
-            <font>
-             <family>Yu Gothic UI</family>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
            </property>
            <property name="font">
             <font>
@@ -1595,7 +1529,7 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="QWebEngineView" name="webEngineViewDP">
+         <widget class="QWebEngineView" name="viewDP">
           <property name="url">
            <url>
             <string>about:blank</string>
