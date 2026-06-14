@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6 import uic
 
-class DescompactarController(QWidget):
-    def __init__(self, vista_descompactar):
+class DescompactarController:
+    def __init__(self, mainWindow):
         super().__init__()
         #uic.loadUi("Ventanas/descompactarPanel.ui", self)
-        self.vista = vista_descompactar
+        self.mainWindow = mainWindow
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         #self.loadFile_btn.clicked.connect(lambda: self.cambiarPanel(1))     # Cambia al panel de carga de archivos, el indice 1 es el loadFilePanel

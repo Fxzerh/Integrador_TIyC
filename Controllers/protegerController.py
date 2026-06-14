@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6 import uic
 
-class ProtegerController(QWidget):
-    def __init__(self, vista_proteger):
+class ProtegerController:
+    def __init__(self, mainWindow):
         super().__init__()
         #uic.loadUi("Ventanas/protegerPanel.ui", self)
-        self.vista = vista_proteger
+        self.mainWindow = mainWindow
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         #self.loadFile_btn.clicked.connect(lambda: self.cambiarPanel(1))     # Cambia al panel de carga de archivos, el indice 1 es el loadFilePanel
