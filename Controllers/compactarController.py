@@ -34,8 +34,7 @@ class CompactarController:
     def refrescarPanel(self):
         self.mainWindow.tableFileC.setRowCount(0)
         self.cargarTabla()
-        #self.textFileO.clear()
-        #self.textFileC.clear()
+        self.mainWindow.viewC.setUrl(QUrl("about:blank"))
 
     def cargarTabla(self):
         if os.path.exists(self.carpetaArchivos):

@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import QUrl
 from Clases.cargarArchivo import Cargar
 import os
 
@@ -24,6 +25,7 @@ class DescompactarController:
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         self.mainWindow.subirArchivoDC_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
+        self.mainWindow.tableFileDC.itemClicked.connect(self.mostrar)
         
 
     
@@ -33,8 +35,7 @@ class DescompactarController:
     def refrescarPanel(self):
         self.mainWindow.tableFileDC.setRowCount(0)
         self.cargarTabla()
-        #self.textFileO.clear()
-        #self.textFileC.clear()
+        self.mainWindow.viewDC.setUrl(QUrl("about:blank"))
 
     def cargarTabla(self):
         if os.path.exists(self.carpetaArchivos):
@@ -59,3 +60,15 @@ class DescompactarController:
                     self.mainWindow.tableFileDC.insertRow(rowPosition)
                     self.mainWindow.tableFileDC.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
                     self.mainWindow.tableFileDC.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
+    
+    def mostrarArchivo(self, nombre_archivo):
+        ruta_completa = os.path.join(self.carpetaArchivos, nombre_archivo)
+        if os.path.exists(ruta_completa):
+            url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
+            self.mainWindow.viewDC.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
+
+    def mostrar(self, item):
+        fila = item.row()      # Obtenemos el número de la fila que el usuario tocó
+        nombre = self.mainWindow.tableFileDC.item(fila, 0)    # Extraemos el objeto celda de la columna 0 (Nombre) en esa fila
+        nombreArchivo = nombre.text()    # Sacamos el texto plano (el nombre real del archivo)
+        self.mostrarArchivo(nombreArchivo)     # Le pasamos el nombre a la función que lo carga en el visor web
