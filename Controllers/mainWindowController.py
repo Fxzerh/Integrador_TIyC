@@ -5,10 +5,12 @@ from PyQt6 import uic
 from Controllers.inicioController import InicioController
 from Controllers.compactarController import CompactarController
 from Controllers.descompactarController import DescompactarController
-from Controllers.verTextosController import VerTextosController
+from Controllers.verDCController import VerDCController
 from Controllers.protegerController import ProtegerController
 from Controllers.insertarErrorController import InsertarErrorController
 from Controllers.desprotegerController import DesprotegerController
+from Controllers.verDPController import VerDPController
+from Controllers.estadisticasController import EstadisticasController
 
 
 class MainWindow(QMainWindow):
@@ -23,19 +25,24 @@ class MainWindow(QMainWindow):
         self.inicioController = InicioController(self)                          # Indice 0
         self.compactarController = CompactarController(self)                 # Indice 1
         self.descompactarController = DescompactarController(self)        # Indice 2
-        self.verTextosController = VerTextosController(self)                 # Indice 3
+        self.verDCController = VerDCController(self)                 # Indice 3
         self.protegerController = ProtegerController(self)                    # Indice 4
         self.insertarErrorController = InsertarErrorController(self)     # Indice 5
         self.desprotegerController = DesprotegerController(self)           # Indice 6  
+        self.verDPController = VerDPController(self)                 # Indice 7
+        self.estadisticasController = EstadisticasController(self)                 # Indice 8
+
 
         self.controladores = [
             self.inicioController,         # Índice 0
             self.compactarController,      # Índice 1
             self.descompactarController,   # Índice 2
-            self.verTextosController,      # Índice 3
+            self.verDCController,      # Índice 3
             self.protegerController,       # Índice 4
             self.insertarErrorController,  # Índice 5
-            self.desprotegerController     # Índice 6
+            self.desprotegerController,     # Índice 6
+            self.verDPController,          # Índice 7
+            self.estadisticasController     # Índice 8
         ]
 
         self.stackedWidget.setCurrentIndex(0)      # Mostramos el panel de inicio al iniciar la aplicación
@@ -44,10 +51,12 @@ class MainWindow(QMainWindow):
         self.inicio_btn.clicked.connect(lambda: self.cambiar_pantalla(0))
         self.compactar_btn.clicked.connect(lambda: self.cambiar_pantalla(1))
         self.descompactar_btn.clicked.connect(lambda: self.cambiar_pantalla(2))
-        self.verTextos_btn.clicked.connect(lambda: self.cambiar_pantalla(3))
+        self.verDC_btn.clicked.connect(lambda: self.cambiar_pantalla(3))
         self.proteger_btn.clicked.connect(lambda: self.cambiar_pantalla(4))
         self.insertarError_btn.clicked.connect(lambda: self.cambiar_pantalla(5))
         self.desproteger_btn.clicked.connect(lambda: self.cambiar_pantalla(6))
+        self.verDP_btn.clicked.connect(lambda: self.cambiar_pantalla(7))
+        self.estadisticas_btn.clicked.connect(lambda: self.cambiar_pantalla(8))
 
         
     def cambiar_pantalla(self, indice):

@@ -77,13 +77,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label)
 
-        self.pushButton = QPushButton(self.frame)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setEnabled(False)
-        self.pushButton.setMinimumSize(QSize(0, 20))
-        self.pushButton.setMaximumSize(QSize(16777215, 25))
+        self.verticalSpacer_18 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout.addWidget(self.pushButton)
+        self.verticalLayout.addItem(self.verticalSpacer_18)
 
         self.inicio_btn = QPushButton(self.frame)
         self.inicio_btn.setObjectName(u"inicio_btn")
@@ -103,10 +99,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.descompactar_btn)
 
-        self.verTextos_btn = QPushButton(self.frame)
-        self.verTextos_btn.setObjectName(u"verTextos_btn")
+        self.verDC_btn = QPushButton(self.frame)
+        self.verDC_btn.setObjectName(u"verDC_btn")
 
-        self.verticalLayout.addWidget(self.verTextos_btn)
+        self.verticalLayout.addWidget(self.verDC_btn)
 
         self.proteger_btn = QPushButton(self.frame)
         self.proteger_btn.setObjectName(u"proteger_btn")
@@ -122,6 +118,16 @@ class Ui_MainWindow(object):
         self.desproteger_btn.setObjectName(u"desproteger_btn")
 
         self.verticalLayout.addWidget(self.desproteger_btn)
+
+        self.verDP_btn = QPushButton(self.frame)
+        self.verDP_btn.setObjectName(u"verDP_btn")
+
+        self.verticalLayout.addWidget(self.verDP_btn)
+
+        self.estadisticas_btn = QPushButton(self.frame)
+        self.estadisticas_btn.setObjectName(u"estadisticas_btn")
+
+        self.verticalLayout.addWidget(self.estadisticas_btn)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -141,83 +147,98 @@ class Ui_MainWindow(object):
         self.gridLayout = QGridLayout(self.inicioPanel)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(15, 15, 20, 15)
-        self.compactarInicio_btn = QPushButton(self.inicioPanel)
-        self.compactarInicio_btn.setObjectName(u"compactarInicio_btn")
-        self.compactarInicio_btn.setMinimumSize(QSize(0, 120))
-        font2 = QFont()
-        font2.setFamilies([u"Yu Gothic UI"])
-        font2.setPointSize(20)
-        font2.setBold(False)
-        self.compactarInicio_btn.setFont(font2)
-
-        self.gridLayout.addWidget(self.compactarInicio_btn, 2, 1, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer, 2, 0, 3, 1)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer_2, 5, 1, 1, 2)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer_2, 2, 3, 3, 1)
-
-        self.desprotegerInicio_btn = QPushButton(self.inicioPanel)
-        self.desprotegerInicio_btn.setObjectName(u"desprotegerInicio_btn")
-        self.desprotegerInicio_btn.setMinimumSize(QSize(0, 120))
-        font3 = QFont()
-        font3.setFamilies([u"Yu Gothic UI"])
-        font3.setPointSize(20)
-        self.desprotegerInicio_btn.setFont(font3)
-
-        self.gridLayout.addWidget(self.desprotegerInicio_btn, 4, 2, 1, 1)
-
-        self.verTextosInicio_btn = QPushButton(self.inicioPanel)
-        self.verTextosInicio_btn.setObjectName(u"verTextosInicio_btn")
-        self.verTextosInicio_btn.setMinimumSize(QSize(0, 120))
-        self.verTextosInicio_btn.setFont(font3)
-
-        self.gridLayout.addWidget(self.verTextosInicio_btn, 3, 1, 1, 1)
-
         self.descompactarInicio_btn = QPushButton(self.inicioPanel)
         self.descompactarInicio_btn.setObjectName(u"descompactarInicio_btn")
         self.descompactarInicio_btn.setMinimumSize(QSize(0, 120))
-        self.descompactarInicio_btn.setFont(font3)
+        font2 = QFont()
+        font2.setFamilies([u"Yu Gothic UI"])
+        font2.setPointSize(20)
+        self.descompactarInicio_btn.setFont(font2)
 
         self.gridLayout.addWidget(self.descompactarInicio_btn, 2, 2, 1, 1)
 
-        self.insertarErrorInicio_btn = QPushButton(self.inicioPanel)
-        self.insertarErrorInicio_btn.setObjectName(u"insertarErrorInicio_btn")
-        self.insertarErrorInicio_btn.setMinimumSize(QSize(0, 120))
-        self.insertarErrorInicio_btn.setFont(font3)
-
-        self.gridLayout.addWidget(self.insertarErrorInicio_btn, 4, 1, 1, 1)
-
-        self.protegerInicio_btn = QPushButton(self.inicioPanel)
-        self.protegerInicio_btn.setObjectName(u"protegerInicio_btn")
-        self.protegerInicio_btn.setMinimumSize(QSize(0, 120))
-        self.protegerInicio_btn.setFont(font3)
-
-        self.gridLayout.addWidget(self.protegerInicio_btn, 3, 2, 1, 1)
-
         self.titulo = QLabel(self.inicioPanel)
         self.titulo.setObjectName(u"titulo")
-        font4 = QFont()
-        font4.setFamilies([u"Yu Gothic UI"])
-        font4.setPointSize(40)
-        font4.setBold(True)
-        font4.setItalic(False)
-        self.titulo.setFont(font4)
+        font3 = QFont()
+        font3.setFamilies([u"Yu Gothic UI"])
+        font3.setPointSize(40)
+        font3.setBold(True)
+        font3.setItalic(False)
+        self.titulo.setFont(font3)
         self.titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.titulo, 0, 1, 1, 2)
 
+        self.insertarErrorInicio_btn = QPushButton(self.inicioPanel)
+        self.insertarErrorInicio_btn.setObjectName(u"insertarErrorInicio_btn")
+        self.insertarErrorInicio_btn.setMinimumSize(QSize(0, 120))
+        self.insertarErrorInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.insertarErrorInicio_btn, 5, 1, 1, 1)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_2, 2, 3, 4, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 2, 0, 4, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout.addItem(self.verticalSpacer_2, 8, 1, 1, 2)
+
+        self.verDCInicio_btn = QPushButton(self.inicioPanel)
+        self.verDCInicio_btn.setObjectName(u"verDCInicio_btn")
+        self.verDCInicio_btn.setMinimumSize(QSize(0, 120))
+        self.verDCInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.verDCInicio_btn, 4, 1, 1, 1)
+
+        self.compactarInicio_btn = QPushButton(self.inicioPanel)
+        self.compactarInicio_btn.setObjectName(u"compactarInicio_btn")
+        self.compactarInicio_btn.setMinimumSize(QSize(0, 120))
+        font4 = QFont()
+        font4.setFamilies([u"Yu Gothic UI"])
+        font4.setPointSize(20)
+        font4.setBold(False)
+        self.compactarInicio_btn.setFont(font4)
+
+        self.gridLayout.addWidget(self.compactarInicio_btn, 2, 1, 1, 1)
+
+        self.verDPInicio_btn = QPushButton(self.inicioPanel)
+        self.verDPInicio_btn.setObjectName(u"verDPInicio_btn")
+        self.verDPInicio_btn.setMinimumSize(QSize(0, 120))
+        self.verDPInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.verDPInicio_btn, 4, 2, 1, 1)
+
+        self.protegerInicio_btn = QPushButton(self.inicioPanel)
+        self.protegerInicio_btn.setObjectName(u"protegerInicio_btn")
+        self.protegerInicio_btn.setMinimumSize(QSize(0, 120))
+        self.protegerInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.protegerInicio_btn, 3, 1, 1, 1)
+
+        self.desprotegerInicio_btn = QPushButton(self.inicioPanel)
+        self.desprotegerInicio_btn.setObjectName(u"desprotegerInicio_btn")
+        self.desprotegerInicio_btn.setMinimumSize(QSize(0, 120))
+        self.desprotegerInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.desprotegerInicio_btn, 3, 2, 1, 1)
+
+        self.estadisticasInicio_btn = QPushButton(self.inicioPanel)
+        self.estadisticasInicio_btn.setObjectName(u"estadisticasInicio_btn")
+        self.estadisticasInicio_btn.setMinimumSize(QSize(0, 120))
+        self.estadisticasInicio_btn.setFont(font2)
+
+        self.gridLayout.addWidget(self.estadisticasInicio_btn, 5, 2, 1, 1)
+
         self.gridLayout.setRowStretch(0, 1)
-        self.gridLayout.setRowStretch(2, 3)
-        self.gridLayout.setRowStretch(3, 3)
-        self.gridLayout.setRowStretch(4, 3)
+        self.gridLayout.setRowStretch(2, 4)
+        self.gridLayout.setRowStretch(3, 4)
+        self.gridLayout.setRowStretch(4, 4)
+        self.gridLayout.setRowStretch(5, 4)
         self.gridLayout.setColumnStretch(0, 1)
         self.gridLayout.setColumnStretch(1, 2)
         self.gridLayout.setColumnStretch(2, 2)
@@ -296,7 +317,7 @@ class Ui_MainWindow(object):
         self.label_2 = QLabel(self.compactarPanel)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMinimumSize(QSize(0, 0))
-        self.label_2.setFont(font4)
+        self.label_2.setFont(font3)
         self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_3.addWidget(self.label_2, 1, 0, 1, 3)
@@ -343,7 +364,7 @@ class Ui_MainWindow(object):
 
         self.label_5 = QLabel(self.descompactarPanel)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font4)
+        self.label_5.setFont(font3)
         self.label_5.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_4.addWidget(self.label_5, 0, 0, 1, 3)
@@ -399,33 +420,33 @@ class Ui_MainWindow(object):
         self.gridLayout_4.setColumnStretch(0, 2)
         self.gridLayout_4.setColumnStretch(2, 3)
         self.stackedWidget.addWidget(self.descompactarPanel)
-        self.verTextosPanel = QWidget()
-        self.verTextosPanel.setObjectName(u"verTextosPanel")
+        self.verDescompactadosPanel = QWidget()
+        self.verDescompactadosPanel.setObjectName(u"verDescompactadosPanel")
         font11 = QFont()
         font11.setFamilies([u"Segoe UI Black"])
-        self.verTextosPanel.setFont(font11)
-        self.gridLayout_5 = QGridLayout(self.verTextosPanel)
+        self.verDescompactadosPanel.setFont(font11)
+        self.gridLayout_5 = QGridLayout(self.verDescompactadosPanel)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.gridLayout_5.setContentsMargins(15, 15, 20, 15)
         self.verticalSpacer_9 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_5.addItem(self.verticalSpacer_9, 4, 2, 1, 1)
 
-        self.viewVT_R = QWebEngineView(self.verTextosPanel)
-        self.viewVT_R.setObjectName(u"viewVT_R")
-        self.viewVT_R.setUrl(QUrl(u"about:blank"))
+        self.viewVDC_R = QWebEngineView(self.verDescompactadosPanel)
+        self.viewVDC_R.setObjectName(u"viewVDC_R")
+        self.viewVDC_R.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_5.addWidget(self.viewVT_R, 5, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.viewVDC_R, 5, 2, 1, 1)
 
-        self.label_10 = QLabel(self.verTextosPanel)
+        self.label_10 = QLabel(self.verDescompactadosPanel)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setFont(font6)
 
         self.gridLayout_5.addWidget(self.label_10, 2, 2, 1, 1)
 
-        self.label_8 = QLabel(self.verTextosPanel)
+        self.label_8 = QLabel(self.verDescompactadosPanel)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setFont(font4)
+        self.label_8.setFont(font3)
         self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_5.addWidget(self.label_8, 0, 0, 1, 3)
@@ -434,31 +455,31 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addItem(self.horizontalSpacer_4, 3, 1, 1, 1)
 
-        self.viewVT_O = QWebEngineView(self.verTextosPanel)
-        self.viewVT_O.setObjectName(u"viewVT_O")
-        self.viewVT_O.setUrl(QUrl(u"about:blank"))
+        self.viewVDC_O = QWebEngineView(self.verDescompactadosPanel)
+        self.viewVDC_O.setObjectName(u"viewVDC_O")
+        self.viewVDC_O.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_5.addWidget(self.viewVT_O, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.viewVDC_O, 3, 2, 1, 1)
 
-        self.label_9 = QLabel(self.verTextosPanel)
+        self.label_9 = QLabel(self.verDescompactadosPanel)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setFont(font6)
 
         self.gridLayout_5.addWidget(self.label_9, 2, 0, 1, 1)
 
-        self.tableFileVT = QTableWidget(self.verTextosPanel)
-        if (self.tableFileVT.columnCount() < 2):
-            self.tableFileVT.setColumnCount(2)
+        self.tableFileVDC = QTableWidget(self.verDescompactadosPanel)
+        if (self.tableFileVDC.columnCount() < 2):
+            self.tableFileVDC.setColumnCount(2)
         __qtablewidgetitem4 = QTableWidgetItem()
         __qtablewidgetitem4.setFont(font8)
-        self.tableFileVT.setHorizontalHeaderItem(0, __qtablewidgetitem4)
+        self.tableFileVDC.setHorizontalHeaderItem(0, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
         __qtablewidgetitem5.setFont(font8)
-        self.tableFileVT.setHorizontalHeaderItem(1, __qtablewidgetitem5)
-        self.tableFileVT.setObjectName(u"tableFileVT")
-        self.tableFileVT.horizontalHeader().setStretchLastSection(False)
+        self.tableFileVDC.setHorizontalHeaderItem(1, __qtablewidgetitem5)
+        self.tableFileVDC.setObjectName(u"tableFileVDC")
+        self.tableFileVDC.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_5.addWidget(self.tableFileVT, 3, 0, 3, 1)
+        self.gridLayout_5.addWidget(self.tableFileVDC, 3, 0, 3, 1)
 
         self.verticalSpacer_14 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -468,7 +489,7 @@ class Ui_MainWindow(object):
         self.gridLayout_5.setRowStretch(5, 2)
         self.gridLayout_5.setColumnStretch(0, 2)
         self.gridLayout_5.setColumnStretch(2, 3)
-        self.stackedWidget.addWidget(self.verTextosPanel)
+        self.stackedWidget.addWidget(self.verDescompactadosPanel)
         self.protegerPanel = QWidget()
         self.protegerPanel.setObjectName(u"protegerPanel")
         self.gridLayout_6 = QGridLayout(self.protegerPanel)
@@ -538,7 +559,7 @@ class Ui_MainWindow(object):
 
         self.label_11 = QLabel(self.protegerPanel)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setFont(font4)
+        self.label_11.setFont(font3)
         self.label_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_6.addWidget(self.label_11, 0, 0, 1, 5)
@@ -575,7 +596,7 @@ class Ui_MainWindow(object):
 
         self.label_14 = QLabel(self.insertarErrorPanel)
         self.label_14.setObjectName(u"label_14")
-        self.label_14.setFont(font4)
+        self.label_14.setFont(font3)
         self.label_14.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout_7.addWidget(self.label_14, 0, 0, 1, 4)
@@ -649,24 +670,6 @@ class Ui_MainWindow(object):
         self.gridLayout_8 = QGridLayout(self.desprotegerPanel)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.gridLayout_8.setContentsMargins(15, 15, 20, 15)
-        self.desprotegerArchivo_btn = QPushButton(self.desprotegerPanel)
-        self.desprotegerArchivo_btn.setObjectName(u"desprotegerArchivo_btn")
-        self.desprotegerArchivo_btn.setMinimumSize(QSize(300, 60))
-        self.desprotegerArchivo_btn.setFont(font7)
-
-        self.gridLayout_8.addWidget(self.desprotegerArchivo_btn, 5, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
-
-        self.horizontalSpacer_8 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_8.addItem(self.horizontalSpacer_8, 3, 1, 1, 1)
-
-        self.subirArchivoDP_btn = QPushButton(self.desprotegerPanel)
-        self.subirArchivoDP_btn.setObjectName(u"subirArchivoDP_btn")
-        self.subirArchivoDP_btn.setMinimumSize(QSize(200, 60))
-        self.subirArchivoDP_btn.setFont(font7)
-
-        self.gridLayout_8.addWidget(self.subirArchivoDP_btn, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
-
         self.tableFileDP = QTableWidget(self.desprotegerPanel)
         if (self.tableFileDP.columnCount() < 2):
             self.tableFileDP.setColumnCount(2)
@@ -681,6 +684,31 @@ class Ui_MainWindow(object):
 
         self.gridLayout_8.addWidget(self.tableFileDP, 3, 0, 1, 1)
 
+        self.subirArchivoDP_btn = QPushButton(self.desprotegerPanel)
+        self.subirArchivoDP_btn.setObjectName(u"subirArchivoDP_btn")
+        self.subirArchivoDP_btn.setMinimumSize(QSize(200, 60))
+        self.subirArchivoDP_btn.setFont(font7)
+
+        self.gridLayout_8.addWidget(self.subirArchivoDP_btn, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+
+        self.horizontalSpacer_8 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_8.addItem(self.horizontalSpacer_8, 3, 1, 1, 1)
+
+        self.label_18 = QLabel(self.desprotegerPanel)
+        self.label_18.setObjectName(u"label_18")
+        self.label_18.setFont(font6)
+
+        self.gridLayout_8.addWidget(self.label_18, 2, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_8.addItem(self.verticalSpacer_4, 1, 0, 1, 3)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_8.addItem(self.verticalSpacer_3, 4, 0, 1, 3)
+
         self.label_19 = QLabel(self.desprotegerPanel)
         self.label_19.setObjectName(u"label_19")
         self.label_19.setFont(font6)
@@ -691,34 +719,146 @@ class Ui_MainWindow(object):
         self.viewDP.setObjectName(u"viewDP")
         self.viewDP.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_8.addWidget(self.viewDP, 3, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.viewDP, 3, 2, 1, 3)
+
+        self.desprotegerArchivoSC_btn = QPushButton(self.desprotegerPanel)
+        self.desprotegerArchivoSC_btn.setObjectName(u"desprotegerArchivoSC_btn")
+        self.desprotegerArchivoSC_btn.setMinimumSize(QSize(300, 60))
+        self.desprotegerArchivoSC_btn.setFont(font7)
+
+        self.gridLayout_8.addWidget(self.desprotegerArchivoSC_btn, 5, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+
+        self.desprotegerArchivoC_btn = QPushButton(self.desprotegerPanel)
+        self.desprotegerArchivoC_btn.setObjectName(u"desprotegerArchivoC_btn")
+        self.desprotegerArchivoC_btn.setMinimumSize(QSize(300, 60))
+        self.desprotegerArchivoC_btn.setFont(font7)
+
+        self.gridLayout_8.addWidget(self.desprotegerArchivoC_btn, 5, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.label_17 = QLabel(self.desprotegerPanel)
         self.label_17.setObjectName(u"label_17")
-        self.label_17.setFont(font4)
+        self.label_17.setFont(font3)
         self.label_17.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_8.addWidget(self.label_17, 0, 0, 1, 3)
-
-        self.label_18 = QLabel(self.desprotegerPanel)
-        self.label_18.setObjectName(u"label_18")
-        self.label_18.setFont(font6)
-
-        self.gridLayout_8.addWidget(self.label_18, 2, 0, 1, 1)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_8.addItem(self.verticalSpacer_3, 4, 0, 1, 3)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_8.addItem(self.verticalSpacer_4, 1, 0, 1, 3)
+        self.gridLayout_8.addWidget(self.label_17, 0, 0, 1, 4)
 
         self.gridLayout_8.setRowStretch(3, 3)
         self.gridLayout_8.setRowStretch(5, 2)
         self.gridLayout_8.setColumnStretch(0, 2)
-        self.gridLayout_8.setColumnStretch(2, 3)
+        self.gridLayout_8.setColumnStretch(2, 1)
+        self.gridLayout_8.setColumnStretch(3, 1)
         self.stackedWidget.addWidget(self.desprotegerPanel)
+        self.verDesprotegidosPanel = QWidget()
+        self.verDesprotegidosPanel.setObjectName(u"verDesprotegidosPanel")
+        font12 = QFont()
+        font12.setFamilies([u"Yu Gothic UI"])
+        font12.setPointSize(9)
+        self.verDesprotegidosPanel.setFont(font12)
+        self.gridLayout_9 = QGridLayout(self.verDesprotegidosPanel)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_9.setContentsMargins(15, 15, 20, 15)
+        self.tableFileVDP = QTableWidget(self.verDesprotegidosPanel)
+        if (self.tableFileVDP.columnCount() < 2):
+            self.tableFileVDP.setColumnCount(2)
+        __qtablewidgetitem12 = QTableWidgetItem()
+        __qtablewidgetitem12.setFont(font8)
+        self.tableFileVDP.setHorizontalHeaderItem(0, __qtablewidgetitem12)
+        __qtablewidgetitem13 = QTableWidgetItem()
+        __qtablewidgetitem13.setFont(font8)
+        self.tableFileVDP.setHorizontalHeaderItem(1, __qtablewidgetitem13)
+        self.tableFileVDP.setObjectName(u"tableFileVDP")
+
+        self.gridLayout_9.addWidget(self.tableFileVDP, 3, 0, 3, 1)
+
+        self.viewVDP_R = QWebEngineView(self.verDesprotegidosPanel)
+        self.viewVDP_R.setObjectName(u"viewVDP_R")
+        self.viewVDP_R.setUrl(QUrl(u"about:blank"))
+
+        self.gridLayout_9.addWidget(self.viewVDP_R, 5, 2, 1, 1)
+
+        self.label_22 = QLabel(self.verDesprotegidosPanel)
+        self.label_22.setObjectName(u"label_22")
+        self.label_22.setFont(font6)
+
+        self.gridLayout_9.addWidget(self.label_22, 2, 2, 1, 1)
+
+        self.label_21 = QLabel(self.verDesprotegidosPanel)
+        self.label_21.setObjectName(u"label_21")
+        self.label_21.setFont(font6)
+
+        self.gridLayout_9.addWidget(self.label_21, 2, 0, 1, 1)
+
+        self.verticalSpacer_16 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_16, 4, 2, 1, 1)
+
+        self.horizontalSpacer_9 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_9.addItem(self.horizontalSpacer_9, 3, 1, 1, 1)
+
+        self.viewVDP_O = QWebEngineView(self.verDesprotegidosPanel)
+        self.viewVDP_O.setObjectName(u"viewVDP_O")
+        self.viewVDP_O.setUrl(QUrl(u"about:blank"))
+
+        self.gridLayout_9.addWidget(self.viewVDP_O, 3, 2, 1, 1)
+
+        self.label_20 = QLabel(self.verDesprotegidosPanel)
+        self.label_20.setObjectName(u"label_20")
+        self.label_20.setFont(font3)
+        self.label_20.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.gridLayout_9.addWidget(self.label_20, 0, 0, 1, 3)
+
+        self.verticalSpacer_15 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_15, 1, 0, 1, 3)
+
+        self.gridLayout_9.setRowStretch(3, 2)
+        self.gridLayout_9.setRowStretch(5, 2)
+        self.gridLayout_9.setColumnStretch(0, 2)
+        self.gridLayout_9.setColumnStretch(2, 3)
+        self.stackedWidget.addWidget(self.verDesprotegidosPanel)
+        self.estadisticasPanel = QWidget()
+        self.estadisticasPanel.setObjectName(u"estadisticasPanel")
+        self.gridLayout_10 = QGridLayout(self.estadisticasPanel)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.gridLayout_10.setContentsMargins(20, 15, 20, 15)
+        self.label_23 = QLabel(self.estadisticasPanel)
+        self.label_23.setObjectName(u"label_23")
+        self.label_23.setFont(font3)
+        self.label_23.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.label_23, 0, 0, 1, 1)
+
+        self.tableFileE = QTableWidget(self.estadisticasPanel)
+        if (self.tableFileE.columnCount() < 5):
+            self.tableFileE.setColumnCount(5)
+        __qtablewidgetitem14 = QTableWidgetItem()
+        __qtablewidgetitem14.setFont(font9)
+        self.tableFileE.setHorizontalHeaderItem(0, __qtablewidgetitem14)
+        __qtablewidgetitem15 = QTableWidgetItem()
+        __qtablewidgetitem15.setFont(font9)
+        self.tableFileE.setHorizontalHeaderItem(1, __qtablewidgetitem15)
+        __qtablewidgetitem16 = QTableWidgetItem()
+        __qtablewidgetitem16.setFont(font9)
+        self.tableFileE.setHorizontalHeaderItem(2, __qtablewidgetitem16)
+        __qtablewidgetitem17 = QTableWidgetItem()
+        __qtablewidgetitem17.setFont(font9)
+        self.tableFileE.setHorizontalHeaderItem(3, __qtablewidgetitem17)
+        __qtablewidgetitem18 = QTableWidgetItem()
+        __qtablewidgetitem18.setFont(font9)
+        self.tableFileE.setHorizontalHeaderItem(4, __qtablewidgetitem18)
+        self.tableFileE.setObjectName(u"tableFileE")
+
+        self.gridLayout_10.addWidget(self.tableFileE, 2, 0, 1, 1)
+
+        self.verticalSpacer_17 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_10.addItem(self.verticalSpacer_17, 1, 0, 1, 1)
+
+        self.gridLayout_10.setRowStretch(0, 1)
+        self.gridLayout_10.setRowStretch(2, 6)
+        self.stackedWidget.addWidget(self.estadisticasPanel)
 
         self.gridLayout_2.addWidget(self.stackedWidget, 0, 1, 1, 1)
 
@@ -726,7 +866,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(7)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -735,21 +875,24 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Proyecto Final", None))
-        self.pushButton.setText("")
         self.inicio_btn.setText(QCoreApplication.translate("MainWindow", u"Inicio", None))
         self.compactar_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar", None))
         self.descompactar_btn.setText(QCoreApplication.translate("MainWindow", u"Descompactar", None))
-        self.verTextos_btn.setText(QCoreApplication.translate("MainWindow", u"Visualizar Textos", None))
+        self.verDC_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Descompactados", None))
         self.proteger_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivos", None))
         self.insertarError_btn.setText(QCoreApplication.translate("MainWindow", u"Introducir Error", None))
         self.desproteger_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger", None))
-        self.compactarInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar", None))
-        self.desprotegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger", None))
-        self.verTextosInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Textos", None))
+        self.verDP_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Desprotegidos", None))
+        self.estadisticas_btn.setText(QCoreApplication.translate("MainWindow", u"Estad\u00edsticas", None))
         self.descompactarInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Descompactar", None))
-        self.insertarErrorInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Insertar Error", None))
-        self.protegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivo", None))
         self.titulo.setText(QCoreApplication.translate("MainWindow", u"Bienvenido", None))
+        self.insertarErrorInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Insertar Error", None))
+        self.verDCInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Descompactados", None))
+        self.compactarInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar", None))
+        self.verDPInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Desprotegidos", None))
+        self.protegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivo", None))
+        self.desprotegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger", None))
+        self.estadisticasInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Estadisticas", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a compactar:", None))
         self.subirArchivoC_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.compactarArchivo_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar Archivo", None))
@@ -771,9 +914,9 @@ class Ui_MainWindow(object):
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Contenidos:", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Seleccione un archivo:", None))
-        ___qtablewidgetitem4 = self.tableFileVT.horizontalHeaderItem(0)
+        ___qtablewidgetitem4 = self.tableFileVDC.horizontalHeaderItem(0)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
-        ___qtablewidgetitem5 = self.tableFileVT.horizontalHeaderItem(1)
+        ___qtablewidgetitem5 = self.tableFileVDC.horizontalHeaderItem(1)
         ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.subirArchivoP_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
@@ -796,14 +939,33 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a insertar error:", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
-        self.desprotegerArchivo_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo", None))
-        self.subirArchivoDP_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         ___qtablewidgetitem10 = self.tableFileDP.horizontalHeaderItem(0)
         ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
         ___qtablewidgetitem11 = self.tableFileDP.horizontalHeaderItem(1)
         ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
-        self.label_19.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
-        self.label_17.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo", None))
+        self.subirArchivoDP_btn.setText(QCoreApplication.translate("MainWindow", u"Subir Archivo", None))
         self.label_18.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a desproteger:", None))
+        self.label_19.setText(QCoreApplication.translate("MainWindow", u"Contenido del archivo:", None))
+        self.desprotegerArchivoSC_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo Sin Corregir", None))
+        self.desprotegerArchivoC_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo Corrigiendo", None))
+        self.label_17.setText(QCoreApplication.translate("MainWindow", u"Desproteger Archivo", None))
+        ___qtablewidgetitem12 = self.tableFileVDP.horizontalHeaderItem(0)
+        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem13 = self.tableFileVDP.horizontalHeaderItem(1)
+        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        self.label_22.setText(QCoreApplication.translate("MainWindow", u"Contenidos:", None))
+        self.label_21.setText(QCoreApplication.translate("MainWindow", u"Seleccione un archivo:", None))
+        self.label_20.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos", None))
+        self.label_23.setText(QCoreApplication.translate("MainWindow", u"Estad\u00edsticas", None))
+        ___qtablewidgetitem14 = self.tableFileE.horizontalHeaderItem(0)
+        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
+        ___qtablewidgetitem15 = self.tableFileE.horizontalHeaderItem(1)
+        ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
+        ___qtablewidgetitem16 = self.tableFileE.horizontalHeaderItem(2)
+        ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o Compactado", None))
+        ___qtablewidgetitem17 = self.tableFileE.horizontalHeaderItem(3)
+        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o Descompactado", None))
+        ___qtablewidgetitem18 = self.tableFileE.horizontalHeaderItem(4)
+        ___qtablewidgetitem18.setText(QCoreApplication.translate("MainWindow", u"Protecci\u00f3n", None))
     # retranslateUi
 

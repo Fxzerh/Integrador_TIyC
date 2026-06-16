@@ -107,26 +107,20 @@ QPushButton:hover{
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="enabled">
-          <bool>false</bool>
+        <spacer name="verticalSpacer_18">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
-         <property name="minimumSize">
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>0</width>
-           <height>20</height>
+           <width>20</width>
+           <height>15</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+        </spacer>
        </item>
        <item>
         <widget class="QPushButton" name="inicio_btn">
@@ -162,9 +156,9 @@ QPushButton:hover{
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="verTextos_btn">
+        <widget class="QPushButton" name="verDC_btn">
          <property name="text">
-          <string>Visualizar Textos</string>
+          <string>Ver Descompactados</string>
          </property>
         </widget>
        </item>
@@ -186,6 +180,20 @@ QPushButton:hover{
         <widget class="QPushButton" name="desproteger_btn">
          <property name="text">
           <string>Desproteger</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="verDP_btn">
+         <property name="text">
+          <string>Ver Desprotegidos</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="estadisticas_btn">
+         <property name="text">
+          <string>Estadísticas</string>
          </property>
         </widget>
        </item>
@@ -213,13 +221,13 @@ QPushButton:hover{
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="inicioPanel">
        <property name="styleSheet">
         <string notr="true"/>
        </property>
-       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,3,3,3,0" columnstretch="1,2,2,1" rowminimumheight="0,0,0,0,0,0" columnminimumwidth="0,0,0,0">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,4,4,4,4,0,0,0" columnstretch="1,2,2,1" rowminimumheight="0,0,0,0,0,0,0,0,0" columnminimumwidth="0,0,0,0">
         <property name="leftMargin">
          <number>15</number>
         </property>
@@ -232,6 +240,129 @@ QPushButton:hover{
         <property name="bottomMargin">
          <number>15</number>
         </property>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="descompactarInicio_btn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Descompactar</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QLabel" name="titulo">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>40</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Bienvenido</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QPushButton" name="insertarErrorInicio_btn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Insertar Error</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3" rowspan="4">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0" rowspan="4">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="8" column="1" colspan="2">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>60</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="verDCInicio_btn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ver Descompactados</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="QPushButton" name="compactarInicio_btn">
           <property name="minimumSize">
@@ -252,56 +383,8 @@ QPushButton:hover{
           </property>
          </widget>
         </item>
-        <item row="2" column="0" rowspan="3">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="5" column="1" colspan="2">
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>60</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="3" rowspan="3">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="4" column="2">
-         <widget class="QPushButton" name="desprotegerInicio_btn">
+         <widget class="QPushButton" name="verDPInicio_btn">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -315,68 +398,11 @@ QPushButton:hover{
            </font>
           </property>
           <property name="text">
-           <string>Desproteger</string>
+           <string>Ver Desprotegidos</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QPushButton" name="verTextosInicio_btn">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>120</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Ver Textos</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QPushButton" name="descompactarInicio_btn">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>120</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Descompactar</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QPushButton" name="insertarErrorInicio_btn">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>120</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Insertar Error</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
          <widget class="QPushButton" name="protegerInicio_btn">
           <property name="minimumSize">
            <size>
@@ -395,21 +421,41 @@ QPushButton:hover{
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QLabel" name="titulo">
+        <item row="3" column="2">
+         <widget class="QPushButton" name="desprotegerInicio_btn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <family>Yu Gothic UI</family>
-            <pointsize>40</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
+            <pointsize>20</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>Bienvenido</string>
+           <string>Desproteger</string>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QPushButton" name="estadisticasInicio_btn">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Estadisticas</string>
           </property>
          </widget>
         </item>
@@ -816,7 +862,7 @@ QPushButton:hover{
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="verTextosPanel">
+      <widget class="QWidget" name="verDescompactadosPanel">
        <property name="font">
         <font>
          <family>Segoe UI Black</family>
@@ -852,7 +898,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="5" column="2">
-         <widget class="QWebEngineView" name="viewVT_R">
+         <widget class="QWebEngineView" name="viewVDC_R">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -910,7 +956,7 @@ QPushButton:hover{
          </spacer>
         </item>
         <item row="3" column="2">
-         <widget class="QWebEngineView" name="viewVT_O">
+         <widget class="QWebEngineView" name="viewVDC_O">
           <property name="url">
            <url>
             <string>about:blank</string>
@@ -934,7 +980,7 @@ QPushButton:hover{
          </widget>
         </item>
         <item row="3" column="0" rowspan="3">
-         <widget class="QTableWidget" name="tableFileVT">
+         <widget class="QTableWidget" name="tableFileVDC">
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>false</bool>
           </attribute>
@@ -1417,7 +1463,7 @@ QPushButton:hover{
        </layout>
       </widget>
       <widget class="QWidget" name="desprotegerPanel">
-       <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,3,0,2" columnstretch="2,0,3" rowminimumheight="0,0,0,0,0,0">
+       <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,3,0,2" columnstretch="2,0,1,1,0" rowminimumheight="0,0,0,0,0,0">
         <property name="leftMargin">
          <number>15</number>
         </property>
@@ -1430,60 +1476,6 @@ QPushButton:hover{
         <property name="bottomMargin">
          <number>15</number>
         </property>
-        <item row="5" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
-         <widget class="QPushButton" name="desprotegerArchivo_btn">
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>60</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Desproteger Archivo</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="5" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
-         <widget class="QPushButton" name="subirArchivoDP_btn">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>60</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Subir Archivo</string>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="0">
          <widget class="QTableWidget" name="tableFileDP">
           <attribute name="horizontalHeaderStretchLastSection">
@@ -1513,47 +1505,40 @@ QPushButton:hover{
           </column>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QLabel" name="label_19">
+        <item row="5" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
+         <widget class="QPushButton" name="subirArchivoDP_btn">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>60</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <family>Yu Gothic UI</family>
             <pointsize>12</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Contenido del archivo:</string>
+           <string>Subir Archivo</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QWebEngineView" name="viewDP">
-          <property name="url">
-           <url>
-            <string>about:blank</string>
-           </url>
+        <item row="3" column="1">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="3">
-         <widget class="QLabel" name="label_17">
-          <property name="font">
-           <font>
-            <family>Yu Gothic UI</family>
-            <pointsize>40</pointsize>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
           </property>
-          <property name="text">
-           <string>Desproteger Archivo</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-         </widget>
+         </spacer>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_18">
@@ -1569,6 +1554,22 @@ QPushButton:hover{
            <string>Seleccione el archivo a desproteger:</string>
           </property>
          </widget>
+        </item>
+        <item row="1" column="0" colspan="3">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>25</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="4" column="0" colspan="3">
          <spacer name="verticalSpacer_3">
@@ -1586,8 +1587,234 @@ QPushButton:hover{
           </property>
          </spacer>
         </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_19">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Contenido del archivo:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2" colspan="3">
+         <widget class="QWebEngineView" name="viewDP">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
+         <widget class="QPushButton" name="desprotegerArchivoSC_btn">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Desproteger Archivo Sin Corregir</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
+         <widget class="QPushButton" name="desprotegerArchivoC_btn">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Desproteger Archivo Corrigiendo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QLabel" name="label_17">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>40</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Desproteger Archivo</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="verDesprotegidosPanel">
+       <property name="font">
+        <font>
+         <family>Yu Gothic UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,0,2,0,2" columnstretch="2,0,3">
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <property name="bottomMargin">
+         <number>15</number>
+        </property>
+        <item row="3" column="0" rowspan="3">
+         <widget class="QTableWidget" name="tableFileVDP">
+          <column>
+           <property name="text">
+            <string>Archivo</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tamaño</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QWebEngineView" name="viewVDP_R">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_22">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Contenidos:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_21">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Seleccione un archivo:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <spacer name="verticalSpacer_16">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1">
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="2">
+         <widget class="QWebEngineView" name="viewVDP_O">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <widget class="QLabel" name="label_20">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>40</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Comparacion de Textos</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0" colspan="3">
-         <spacer name="verticalSpacer_4">
+         <spacer name="verticalSpacer_15">
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
           </property>
@@ -1598,6 +1825,110 @@ QPushButton:hover{
            <size>
             <width>20</width>
             <height>25</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="estadisticasPanel">
+       <layout class="QGridLayout" name="gridLayout_10" rowstretch="1,0,6" rowminimumheight="0,0,0">
+        <property name="leftMargin">
+         <number>20</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <property name="bottomMargin">
+         <number>15</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="font">
+           <font>
+            <family>Yu Gothic UI</family>
+            <pointsize>40</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Estadísticas</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QTableWidget" name="tableFileE">
+          <column>
+           <property name="text">
+            <string>Archivo</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tamaño</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tamaño Compactado</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tamaño Descompactado</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Protección</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic UI</family>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer_17">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>15</height>
            </size>
           </property>
          </spacer>
