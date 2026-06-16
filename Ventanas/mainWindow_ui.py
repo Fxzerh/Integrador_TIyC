@@ -866,7 +866,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(7)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -890,7 +890,7 @@ class Ui_MainWindow(object):
         self.verDCInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Descompactados", None))
         self.compactarInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar", None))
         self.verDPInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Desprotegidos", None))
-        self.protegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivo", None))
+        self.protegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger", None))
         self.desprotegerInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger", None))
         self.estadisticasInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Estadisticas", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a compactar:", None))

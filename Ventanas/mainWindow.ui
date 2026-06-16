@@ -221,7 +221,7 @@ QPushButton:hover{
 }</string>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="inicioPanel">
        <property name="styleSheet">
@@ -417,7 +417,7 @@ QPushButton:hover{
            </font>
           </property>
           <property name="text">
-           <string>Proteger Archivo</string>
+           <string>Proteger</string>
           </property>
          </widget>
         </item>
