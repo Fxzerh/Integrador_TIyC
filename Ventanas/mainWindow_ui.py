@@ -99,25 +99,25 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.descompactar_btn)
 
-        self.verDC_btn = QPushButton(self.frame)
-        self.verDC_btn.setObjectName(u"verDC_btn")
-
-        self.verticalLayout.addWidget(self.verDC_btn)
-
         self.proteger_btn = QPushButton(self.frame)
         self.proteger_btn.setObjectName(u"proteger_btn")
 
         self.verticalLayout.addWidget(self.proteger_btn)
+
+        self.desproteger_btn = QPushButton(self.frame)
+        self.desproteger_btn.setObjectName(u"desproteger_btn")
+
+        self.verticalLayout.addWidget(self.desproteger_btn)
 
         self.insertarError_btn = QPushButton(self.frame)
         self.insertarError_btn.setObjectName(u"insertarError_btn")
 
         self.verticalLayout.addWidget(self.insertarError_btn)
 
-        self.desproteger_btn = QPushButton(self.frame)
-        self.desproteger_btn.setObjectName(u"desproteger_btn")
+        self.verDC_btn = QPushButton(self.frame)
+        self.verDC_btn.setObjectName(u"verDC_btn")
 
-        self.verticalLayout.addWidget(self.desproteger_btn)
+        self.verticalLayout.addWidget(self.verDC_btn)
 
         self.verDP_btn = QPushButton(self.frame)
         self.verDP_btn.setObjectName(u"verDP_btn")
@@ -866,7 +866,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(5)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -878,10 +878,10 @@ class Ui_MainWindow(object):
         self.inicio_btn.setText(QCoreApplication.translate("MainWindow", u"Inicio", None))
         self.compactar_btn.setText(QCoreApplication.translate("MainWindow", u"Compactar", None))
         self.descompactar_btn.setText(QCoreApplication.translate("MainWindow", u"Descompactar", None))
-        self.verDC_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Descompactados", None))
-        self.proteger_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger Archivos", None))
-        self.insertarError_btn.setText(QCoreApplication.translate("MainWindow", u"Introducir Error", None))
+        self.proteger_btn.setText(QCoreApplication.translate("MainWindow", u"Proteger", None))
         self.desproteger_btn.setText(QCoreApplication.translate("MainWindow", u"Desproteger", None))
+        self.insertarError_btn.setText(QCoreApplication.translate("MainWindow", u"Introducir Error", None))
+        self.verDC_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Descompactados", None))
         self.verDP_btn.setText(QCoreApplication.translate("MainWindow", u"Ver Desprotegidos", None))
         self.estadisticas_btn.setText(QCoreApplication.translate("MainWindow", u"Estad\u00edsticas", None))
         self.descompactarInicio_btn.setText(QCoreApplication.translate("MainWindow", u"Descompactar", None))

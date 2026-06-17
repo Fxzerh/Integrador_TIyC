@@ -156,16 +156,16 @@ QPushButton:hover{
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="verDC_btn">
+        <widget class="QPushButton" name="proteger_btn">
          <property name="text">
-          <string>Ver Descompactados</string>
+          <string>Proteger</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="proteger_btn">
+        <widget class="QPushButton" name="desproteger_btn">
          <property name="text">
-          <string>Proteger Archivos</string>
+          <string>Desproteger</string>
          </property>
         </widget>
        </item>
@@ -177,9 +177,9 @@ QPushButton:hover{
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="desproteger_btn">
+        <widget class="QPushButton" name="verDC_btn">
          <property name="text">
-          <string>Desproteger</string>
+          <string>Ver Descompactados</string>
          </property>
         </widget>
        </item>
@@ -221,7 +221,7 @@ QPushButton:hover{
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="inicioPanel">
        <property name="styleSheet">

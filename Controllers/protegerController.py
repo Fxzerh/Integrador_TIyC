@@ -1,6 +1,10 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import QDateTime, QDate, QTime
+from PyQt6.QtWidgets import QDialog
 from PyQt6.QtCore import QUrl
+from datetime import datetime
 from Clases.cargarArchivo import Cargar
+from Ventanas.popUP_ui import Ui_popUp
 import os
 
 
@@ -25,7 +29,7 @@ class ProtegerController:
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         self.mainWindow.subirArchivoP_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
-        self.mainWindow.tableFileP.itemClicked.connect(self.mostrar)
+        self.mainWindow.tableFileP.itemClicked.connect(self.mostrarArchivo)
         self.mainWindow.hamming8_btn.clicked.connect(self.hamming_8)
         self.mainWindow.hamming1024_btn.clicked.connect(lambda: self.procesarHamming(1024, ".HA2"))
         self.mainWindow.hamming16384_btn.clicked.connect(lambda: self.procesarHamming(16384, ".HA3"))
@@ -64,30 +68,53 @@ class ProtegerController:
                     self.mainWindow.tableFileP.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
                     self.mainWindow.tableFileP.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
 
-    def mostrarArchivo(self, nombre_archivo):
-        ruta_completa = os.path.join(self.carpetaArchivos, nombre_archivo)
-        if os.path.exists(ruta_completa):
-            url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
-            self.mainWindow.viewP.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
-
-    def mostrar(self, item):
-        fila = item.row()      # Obtenemos el número de la fila que el usuario tocó
-        nombre = self.mainWindow.tableFileP.item(fila, 0)    # Extraemos el objeto celda de la columna 0 (Nombre) en esa fila
-        nombreArchivo = nombre.text()    # Sacamos el texto plano (el nombre real del archivo)
-        self.mostrarArchivo(nombreArchivo)     # Le pasamos el nombre a la función que lo carga en el visor web
-
-    def obtenerArchivoSeleccionado(self):
+    def obtenerSeleccionado(self):
         selectedRows = self.mainWindow.tableFileP.selectionModel().selectedRows()
         if selectedRows:
             row = selectedRows[0].row()
             nombreArchivo = self.mainWindow.tableFileP.item(row, 0).text()
             return nombreArchivo
         return None
+
+    def mostrarArchivo(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        ruta_completa = os.path.join(self.carpetaArchivos, nombreArchivo)
+        if os.path.exists(ruta_completa):
+            url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
+            self.mainWindow.viewP.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
+
+    def pedirFechaYHoraApertura(self):
+        # Creamos el componente de diálogo de PyQt6
+        dialogo = QDialog(self.mainWindow)
+        
+        # Instanciamos el diseño que hiciste en Qt Designer
+        uiPopUp = Ui_popUp() 
+        uiPopUp.setupUi(dialogo)
+        
+        uiPopUp.calendario.setMinimumDate(QDate.currentDate())      # Restriccion para que no se puedan elegir fechas pasadas
+        uiPopUp.timer.setTime(QTime.currentTime())                  # Seteamos la hora actual como valor inicial del timer
+        uiPopUp.siguiente_btn.clicked.connect(dialogo.accept)       # Conectamos el botón para que cierre el diálogo al hacer click
+
+        # Mostramos la ventana y congelamos la app
+        resultado = dialogo.exec()
+
+        # Si hizo clic en "Siguiente"
+        if resultado == QDialog.DialogCode.Accepted:
+            fecha = uiPopUp.calendario.selectedDate()
+            hora = uiPopUp.timer.time()
+            # Combinamos los componentes a un formato de 19 caracteres
+            fechaHoraFinal = QDateTime(fecha, hora)
+            return fechaHoraFinal.toString("yyyy-MM-dd hh:mm:ss")
+            
+        return None
     
     def procesarHamming(self, tamanoBloqueDatos, extensionArchivo):
-        self.fileSelect = self.obtenerArchivoSeleccionado()
+        self.fileSelect = self.obtenerSeleccionado()
         if not self.fileSelect:
             QMessageBox.warning(self.mainWindow, "Advertencia", "No se ha seleccionado ningún archivo.")
+            return
+        fechaHoraLimite = self.pedirFechaYHoraApertura()
+        if not fechaHoraLimite:     # Si no se ingresa una fecha de apertura, se cancela el proceso
             return
 
         nombreFile = os.path.splitext(self.fileSelect)[0]
@@ -128,6 +155,7 @@ class ProtegerController:
 
             # Guardamos en el archivo de texto usando espacios como separadores
             with open(rutaDestino, 'wb') as archivoSalida:
+                archivoSalida.write(fechaHoraLimite.encode('utf-8'))
                 archivoSalida.write(bloquesHamming)
 
             QMessageBox.information(self.mainWindow, "Éxito", f"Archivo protegido correctamente.\nGuardado en '{nombreFile}{extensionArchivo}'.")
@@ -137,9 +165,12 @@ class ProtegerController:
             QMessageBox.critical(self.mainWindow, "Error", "No se pudo encontrar el archivo seleccionado.")
 
     def hamming_8(self):
-        self.fileSelect = self.obtenerArchivoSeleccionado()
+        self.fileSelect = self.obtenerSeleccionado()
         if not self.fileSelect:
             QMessageBox.warning(self.mainWindow, "Advertencia", "No se ha seleccionado ningún archivo.")
+            return
+        fechaHoraLimite = self.pedirFechaYHoraApertura()
+        if not fechaHoraLimite:     # Si no se ingresa una fecha de apertura, se cancela el proceso
             return
 
         baseFile = os.path.splitext(self.fileSelect)[0]
@@ -165,6 +196,7 @@ class ProtegerController:
                     # Pasamos los bytes a enteros
                     primerByte = int(trama1, 2)
                     segundoByte = int(trama2, 2)
+                    archivoSalida.write(fechaHoraLimite.encode('utf-8'))
                     archivoSalida.write(bytes([primerByte, segundoByte]))
 
             QMessageBox.information(self.mainWindow, "Éxito", f"Archivo protegido con Hamming (mod 8) correctamente.\nGuardado en '{baseFile}.HA1'.")

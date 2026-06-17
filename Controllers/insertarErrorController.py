@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import QUrl
 from Clases.cargarArchivo import Cargar
+import random
 import os
 
 
@@ -25,7 +26,9 @@ class InsertarErrorController:
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
         self.mainWindow.subirArchivoIE_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
-        self.mainWindow.tableFileIE.itemClicked.connect(self.mostrar)
+        self.mainWindow.insertar1Error_btn.clicked.connect(self.insertar1Error)
+        self.mainWindow.insertar2Errores_btn.clicked.connect(self.insertar2Errores)
+        self.mainWindow.tableFileIE.itemClicked.connect(self.mostrarArchivo)
         
 
     
@@ -61,14 +64,120 @@ class InsertarErrorController:
                     self.mainWindow.tableFileIE.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
                     self.mainWindow.tableFileIE.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
     
-    def mostrarArchivo(self, nombre_archivo):
-        ruta_completa = os.path.join(self.carpetaArchivos, nombre_archivo)
+    def obtenerSeleccionado(self):
+        selectedRows = self.mainWindow.tableFileIE.selectionModel().selectedRows()
+        if selectedRows:
+            row = selectedRows[0].row()
+            nombreArchivo = self.mainWindow.tableFileIE.item(row, 0).text()
+            return nombreArchivo
+        return None
+
+    def mostrarArchivo(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        ruta_completa = os.path.join(self.carpetaArchivos, nombreArchivo)
         if os.path.exists(ruta_completa):
             url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
             self.mainWindow.viewIE.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
+    
+    def insertar1Error(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        if not nombreArchivo:
+            QMessageBox.warning(self.mainWindow, "Aviso", "No se ha seleccionado ningún archivo.")
+            return
+        rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
+        extension = os.path.splitext(rutaFile)[1]
+        if extension not in [".HA1", ".HA2", ".HA3"]:
+            QMessageBox.warning(self.mainWindow, "Aviso", "El archivo seleccionado no es un archivo Hamminizado.")
+            return
+        try:
+            with open(rutaFile, "rb") as archivo:
+                contenido = archivo.read()
+            datos = bytearray(contenido)
+            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
+            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
+            probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
 
-    def mostrar(self, item):
-        fila = item.row()      # Obtenemos el número de la fila que el usuario tocó
-        nombre = self.mainWindow.tableFileIE.item(fila, 0)    # Extraemos el objeto celda de la columna 0 (Nombre) en esa fila
-        nombreArchivo = nombre.text()    # Sacamos el texto plano (el nombre real del archivo)
-        self.mostrarArchivo(nombreArchivo)     # Le pasamos el nombre a la función que lo carga en el visor web
+            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
+            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
+
+            # Insertamos el error saltandonos el header con la fecha de apertura
+            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
+                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
+                if random.random() < prob:
+                    # Elegimos el bit a modificar
+                    byteError = random.randint(i, limite - 1)
+                    bitError = random.randint(0, 7)
+                    # Invertimos el bit de la posicion elegida
+                    datos[byteError] ^= (1 << bitError)
+            # Guardamos el nuevo archivo con el error insertado
+            match extension:
+                case ".HA1":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E1"
+                case ".HA2":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E2"
+                case ".HA3":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E3"
+            
+            with open(archivoFinal, "wb") as archivoSalida:
+                archivoSalida.write(datos)
+            QMessageBox.information(self.mainWindow, "Éxito", f"Inserción de error completada. \nArchivo guardado como: {os.path.basename(archivoFinal)}")
+            self.refrescarPanel()
+        except Exception as e:
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo insertar el error: {str(e)}")
+    
+    def insertar2Errores(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        if not nombreArchivo:
+            QMessageBox.warning(self.mainWindow, "Aviso", "No se ha seleccionado ningún archivo.")
+            return
+        rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
+        extension = os.path.splitext(rutaFile)[1]
+        if extension not in [".HA1", ".HA2", ".HA3"]:
+            QMessageBox.warning(self.mainWindow, "Aviso", "El archivo seleccionado no es un archivo Hamminizado.")
+            return
+        try:
+            with open(rutaFile, "rb") as archivo:
+                contenido = archivo.read()
+            datos = bytearray(contenido)
+            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
+            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
+            probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
+
+            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
+            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
+
+            # Insertamos el error saltandonos el header con la fecha de apertura
+            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
+                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
+                if random.random() < prob:
+                # Primer error
+                    # Elegimos el bit a modificar
+                    byteError1 = random.randint(i, limite - 1)
+                    bitError1 = random.randint(0, 7)
+                    # Invertimos el bit de la posicion elegida
+                    datos[byteError1] ^= (1 << bitError1)
+                # Segundo Error
+                    while True:         # Aseguramos que el segundo bit a modificar sea diferente al primero
+                        byteError2 = random.randint(i, limite - 1)
+                        bitError2 = random.randint(0, 7)
+                        if byteError2 != byteError1 or bitError2 != bitError1:
+                            break
+
+                    datos[byteError2] ^= (1 << bitError2)
+
+            # Guardamos el nuevo archivo con el error insertado
+            match extension:
+                case ".HA1":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E1"
+                case ".HA2":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E2"
+                case ".HA3":
+                    archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E3"
+            
+            with open(archivoFinal, "wb") as archivoSalida:
+                archivoSalida.write(datos)
+            QMessageBox.information(self.mainWindow, "Éxito", f"Inserción de error completada. \nArchivo guardado como: {os.path.basename(archivoFinal)}")
+            self.refrescarPanel()
+        except Exception as e:
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo insertar el error: {str(e)}")
+    
