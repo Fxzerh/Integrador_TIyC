@@ -221,7 +221,7 @@ QPushButton:hover{
 }</string>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="inicioPanel">
        <property name="styleSheet">
@@ -932,7 +932,7 @@ QPushButton:hover{
            </font>
           </property>
           <property name="text">
-           <string>Comparacion de Textos</string>
+           <string>Comparacion de Textos Compactados</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1806,7 +1806,7 @@ QPushButton:hover{
            </font>
           </property>
           <property name="text">
-           <string>Comparacion de Textos</string>
+           <string>Comparacion de Textos Protegidos</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>

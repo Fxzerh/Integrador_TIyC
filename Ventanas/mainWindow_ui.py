@@ -866,7 +866,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(5)
+        self.stackedWidget.setCurrentIndex(7)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -912,7 +912,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Seleccione el archivo a descompactar:", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Contenidos:", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos Compactados", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Seleccione un archivo:", None))
         ___qtablewidgetitem4 = self.tableFileVDC.horizontalHeaderItem(0)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))
@@ -955,7 +955,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o", None))
         self.label_22.setText(QCoreApplication.translate("MainWindow", u"Contenidos:", None))
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Seleccione un archivo:", None))
-        self.label_20.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos", None))
+        self.label_20.setText(QCoreApplication.translate("MainWindow", u"Comparacion de Textos Protegidos", None))
         self.label_23.setText(QCoreApplication.translate("MainWindow", u"Estad\u00edsticas", None))
         ___qtablewidgetitem14 = self.tableFileE.horizontalHeaderItem(0)
         ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Archivo", None))

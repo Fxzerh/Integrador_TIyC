@@ -152,17 +152,15 @@ class InsertarErrorController:
                 if random.random() < prob:
                 # Primer error
                     # Elegimos el bit a modificar
-                    byteError1 = random.randint(i, limite - 1)
-                    bitError1 = random.randint(0, 7)
+                    byteError1 = i
+                    bitError1 = 2   # Bit de dato
                     # Invertimos el bit de la posicion elegida
                     datos[byteError1] ^= (1 << bitError1)
                 # Segundo Error
-                    while True:         # Aseguramos que el segundo bit a modificar sea diferente al primero
-                        byteError2 = random.randint(i, limite - 1)
-                        bitError2 = random.randint(0, 7)
-                        if byteError2 != byteError1 or bitError2 != bitError1:
-                            break
-
+                    # Elegimos el bit a modificar
+                    byteError2 = i
+                    bitError2 = 5   # Bit de dato
+                    # Invertimos el bit de la posicion elegida
                     datos[byteError2] ^= (1 << bitError2)
 
             # Guardamos el nuevo archivo con el error insertado
