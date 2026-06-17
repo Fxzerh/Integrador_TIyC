@@ -24,7 +24,7 @@ class VerDPController:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo cargar la tabla: {str(e)}")
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
-        self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrar)
+        self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrarArchivo)
 
 
     
@@ -61,14 +61,17 @@ class VerDPController:
                     self.mainWindow.tableFileVDP.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
                     self.mainWindow.tableFileVDP.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
 
-    def mostrarArchivo(self, nombre_archivo):
-        ruta_completa = os.path.join(self.carpetaArchivos, nombre_archivo)
+    def obtenerSeleccionado(self):
+        selectedRows = self.mainWindow.tableFileVDP.selectionModel().selectedRows()
+        if selectedRows:
+            row = selectedRows[0].row()
+            nombreArchivo = self.mainWindow.tableFileVDP.item(row, 0).text()
+            return nombreArchivo
+        return None
+
+    def mostrarArchivo(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        ruta_completa = os.path.join(self.carpetaArchivos, nombreArchivo)
         if os.path.exists(ruta_completa):
             url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
             self.mainWindow.viewVDP_O.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
-
-    def mostrar(self, item):
-        fila = item.row()      # Obtenemos el número de la fila que el usuario tocó
-        nombre = self.mainWindow.tableFileVDP.item(fila, 0)    # Extraemos el objeto celda de la columna 0 (Nombre) en esa fila
-        nombreArchivo = nombre.text()    # Sacamos el texto plano (el nombre real del archivo)
-        self.mostrarArchivo(nombreArchivo)     # Le pasamos el nombre a la función que lo carga en el visor web
