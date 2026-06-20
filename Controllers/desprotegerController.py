@@ -36,6 +36,7 @@ class DesprotegerController:
         self.mainWindow.tableFileDP.setRowCount(0)
         self.cargarTabla()
         self.mainWindow.viewDP.setUrl(QUrl("about:blank"))
+        self.mainWindow.viewDP_R.setUrl(QUrl("about:blank"))
 
     def cargarTabla(self):
         extensiones = {".HA1", ".HA2", ".HA3", ".HE1", ".HE2", ".HE3",
@@ -66,47 +67,173 @@ class DesprotegerController:
         return None
 
     def mostrarArchivo(self):
-        nombreArchivo = self.obtenerSeleccionado()
-        if not nombreArchivo:
+        nombre = self.obtenerSeleccionado()
+        if not nombre:
             return
-        ruta_completa = os.path.join(self.carpetaArchivos, nombreArchivo)
-        if os.path.exists(ruta_completa):
-            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(ruta_completa))
+        ruta = os.path.join(self.carpetaArchivos, nombre)
+        if not os.path.exists(ruta):
+            return
+        extension = os.path.splitext(ruta)[1]
+        try:
+            # Panel superior: decodificado sin tocar errores
+            if extension in (".HA1", ".HE1", ".H1E1", ".H2E1"):
+                sinCorregir = self._decodificarHA1SinCorregir(ruta)
+            else:
+                sinCorregir = self._decodificarHA2_3SinCorregir(ruta)
+
+            tipoArchivo = self.detectarExtension(sinCorregir)
+            previoArriba = os.path.join(self.carpetaArchivos, "_previo_arriba" + tipoArchivo)
+            with open(previoArriba, "wb") as f:
+                f.write(sinCorregir)
+            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(previoArriba))
+
+            # Panel inferior: corregido si se puede, si no popup y muestra igual con errores
+            if extension in (".H2E1", ".H2E2", ".H2E3"):
+                QMessageBox.warning(self.mainWindow, "Aviso", "Tiene 2 o más errores, no puede ser arreglado")
+                previoAbajo = os.path.join(self.carpetaArchivos, "_previo_abajo" + tipoArchivo)
+                with open(previoAbajo, "wb") as f:
+                    f.write(sinCorregir)
+                self.mainWindow.viewDP_R.setUrl(QUrl.fromLocalFile(previoAbajo))
+            else:
+                if extension in (".HA1", ".HE1", ".H1E1"):
+                    corregido = self._decodificarHA1Corregido(ruta)
+                else:
+                    corregido = self._decodificarHA2_3Corregido(ruta)
+
+                tipoArchivoCorregido = self.detectarExtension(corregido)
+                previoAbajo = os.path.join(self.carpetaArchivos, "_previo_abajo" + tipoArchivoCorregido)
+                with open(previoAbajo, "wb") as f:
+                    f.write(corregido)
+                self.mainWindow.viewDP_R.setUrl(QUrl.fromLocalFile(previoAbajo))
+        except Exception as e:
+            self.mainWindow.viewDP.setUrl(QUrl("about:blank"))
+            self.mainWindow.viewDP_R.setUrl(QUrl("about:blank"))
+
+    def _decodificarSinCorregir(self, rutaFile):
+        ext = os.path.splitext(rutaFile)[1]
+        if ext in (".H2E1",):
+            return self._decodificarHA1SinCorregir(rutaFile)
+        else:
+            return self._decodificarHA2_3SinCorregir(rutaFile)
+
+    def _decodificarHA1SinCorregir(self, rutaFile):
+        TAM_CABECERA = 19
+        TAM_GRUPO = TAM_CABECERA + 2
+        with open(rutaFile, "rb") as f:
+            datos = f.read()
+        resultado = bytearray()
+        for c in range(0, len(datos), TAM_GRUPO):
+            grupo = datos[c:c + TAM_GRUPO]
+            if len(grupo) < TAM_GRUPO:
+                break
+            bloque = f"{grupo[TAM_CABECERA]:08b}{grupo[TAM_CABECERA+1]:08b}"
+            resultado.append(int(self.sacarParidad8(bloque), 2))
+        return bytes(resultado)
+
+    def _decodificarHA1Corregido(self, rutaFile):
+        TAM_CABECERA = 19
+        TAM_GRUPO = TAM_CABECERA + 2
+        with open(rutaFile, "rb") as f:
+            datos = f.read()
+        resultado = bytearray()
+        for c in range(0, len(datos), TAM_GRUPO):
+            grupo = datos[c:c + TAM_GRUPO]
+            if len(grupo) < TAM_GRUPO:
+                break
+            bloque = f"{grupo[TAM_CABECERA]:08b}{grupo[TAM_CABECERA+1]:08b}"
+            corregido = self.hamming_ver8(bloque)
+            resultado.append(int(self.sacarParidad8(corregido), 2))
+        return bytes(resultado)
+
+    def _decodificarHA2_3SinCorregir(self, rutaFile):
+        TAM_CABECERA = 19
+        ext = os.path.splitext(rutaFile)[1]
+        tam_bloque = 1035 if ext in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        with open(rutaFile, "rb") as f:
+            datos = f.read()
+        bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
+        l1 = ""
+        for c in range(0, len(bits), tam_bloque):
+            bloque = bits[c:c + tam_bloque]
+            if len(bloque) < tam_bloque:
+                break
+            l1 += self.sacarParidad(bloque)
+        return bytes(int(l1[k:k+8], 2) for k in range(0, len(l1) - len(l1) % 8, 8))
+
+    def _decodificarHA2_3Corregido(self, rutaFile):
+        TAM_CABECERA = 19
+        ext = os.path.splitext(rutaFile)[1]
+        tam_bloque = 1035 if ext in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        with open(rutaFile, "rb") as f:
+            datos = f.read()
+        bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
+        l1 = ""
+        for c in range(0, len(bits), tam_bloque):
+            bloque = bits[c:c + tam_bloque]
+            if len(bloque) < tam_bloque:
+                break
+            sindrome = self.calcularSindrome(bloque)
+            if 0 < sindrome <= len(bloque):
+                lst = list(bloque)
+                lst[sindrome - 1] = '0' if lst[sindrome - 1] == '1' else '1'
+                bloque = ''.join(lst)
+            l1 += self.sacarParidad(bloque)
+        return bytes(int(l1[k:k+8], 2) for k in range(0, len(l1) - len(l1) % 8, 8))
 
     def desprotegerSinCorregir(self):
-        nombreArchivo = self.obtenerSeleccionado()
-        if not nombreArchivo:
+        nombre = self.obtenerSeleccionado()
+        if not nombre:
             QMessageBox.warning(self.mainWindow, "Aviso", "Seleccione un archivo de la tabla.")
             return
-        rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
-        ext = os.path.splitext(rutaFile)[1]
+        ruta = os.path.join(self.carpetaArchivos, nombre)
+        extension = os.path.splitext(ruta)[1]
         try:
-            if ext in (".HA1", ".HE1", ".H1E1", ".H2E1"):
-                archivoFinal = self.sacarbitsSinCorregir8(rutaFile)
+            if extension in (".HA1", ".HE1", ".H1E1", ".H2E1"):
+                resultado = self._decodificarHA1SinCorregir(ruta)
             else:
-                archivoFinal = self.sacarbitsSinCorregir(rutaFile)
-            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(archivoFinal))
+                resultado = self._decodificarHA2_3SinCorregir(ruta)
+            self._guardarDecodificado(ruta, extension, resultado, corregido=False)
         except Exception as e:
-            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo desproteger el archivo: {str(e)}")
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo guardar el archivo: {str(e)}")
 
     def desprotegerCorrigiendo(self):
-        nombreArchivo = self.obtenerSeleccionado()
-        if not nombreArchivo:
+        nombre = self.obtenerSeleccionado()
+        if not nombre:
             QMessageBox.warning(self.mainWindow, "Aviso", "Seleccione un archivo de la tabla.")
             return
-        rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
-        ext = os.path.splitext(rutaFile)[1]
-        if ext in (".H2E1", ".H2E2", ".H2E3"):
-            QMessageBox.warning(self.mainWindow, "Aviso", "Este archivo contiene 2 errores por bloque y no puede ser corregido ni desprotegido.")
+        ruta = os.path.join(self.carpetaArchivos, nombre)
+        extension = os.path.splitext(ruta)[1]
+        if extension in (".H2E1", ".H2E2", ".H2E3"):
+            QMessageBox.warning(self.mainWindow, "Aviso", "Tiene 2 o más errores, no puede ser arreglado")
             return
         try:
-            if ext in (".HA1", ".HE1", ".H1E1"):
-                archivoFinal = self.sacarbitsCorregir8(rutaFile)
+            if extension in (".HA1", ".HE1", ".H1E1"):
+                resultado = self._decodificarHA1Corregido(ruta)
             else:
-                archivoFinal = self.sacarbitsCorregido(rutaFile)
-            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(archivoFinal))
+                resultado = self._decodificarHA2_3Corregido(ruta)
+            self._guardarDecodificado(ruta, extension, resultado, corregido=True)
         except Exception as e:
-            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo desproteger el archivo: {str(e)}")
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo guardar el archivo: {str(e)}")
+
+    def _guardarDecodificado(self, ruta, extension, datos, corregido):
+        tieneError = extension in (".H1E1", ".H2E1", ".H1E2", ".H2E2", ".H1E3", ".H2E3")
+        base = ruta if tieneError else os.path.splitext(ruta)[0]
+        sufijo = "DC" if corregido else "DE"
+        match extension:
+            case ".HA1" | ".HE1" | ".H1E1" | ".H2E1":
+                numero = "1"
+            case ".HA2" | ".HE2" | ".H1E2" | ".H2E2":
+                numero = "2"
+            case _:
+                numero = "3"
+        archivoFinal = base + f".{sufijo}{numero}"
+        if os.path.exists(archivoFinal):
+            return  # ya estaba guardado, no hace falta repetir
+        tipoArchivo = self.detectarExtension(datos)
+        with open(base + tipoArchivo, "wb") as f:
+            f.write(datos)
+        with open(archivoFinal, "wb") as f:
+            f.write(datos)
 
     # ---- Deshamminizar sin corregir ----
 
