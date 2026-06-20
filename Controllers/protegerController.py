@@ -182,6 +182,7 @@ class ProtegerController:
                 contenidoBytes = archivo.read()
 
             with open(rutaDestino, 'wb') as archivoSalida:
+                archivoSalida.write(fechaHoraLimite.encode('utf-8'))
                 for byte in contenidoBytes:
                     bloqueBits = f"{byte:08b}"
                     # Dividimos el bloque de 8 bits en 2 mitades de 4 bits
@@ -196,7 +197,6 @@ class ProtegerController:
                     # Pasamos los bytes a enteros
                     primerByte = int(trama1, 2)
                     segundoByte = int(trama2, 2)
-                    archivoSalida.write(fechaHoraLimite.encode('utf-8'))
                     archivoSalida.write(bytes([primerByte, segundoByte]))
 
             QMessageBox.information(self.mainWindow, "Éxito", f"Archivo protegido con Hamming (mod 8) correctamente.\nGuardado en '{baseFile}.HA1'.")

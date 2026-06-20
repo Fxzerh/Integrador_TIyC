@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
-from PyQt6.QtCore import QUrl
+from PyQt6.QtCore import QUrl, QTimer
 from Clases.cargarArchivo import Cargar
 import os
 
@@ -11,6 +11,8 @@ class DesprotegerController:
         self.cargar = Cargar()
         self.directorioBase = os.path.dirname(os.path.abspath(__file__))
         self.carpetaArchivos = os.path.join(self.directorioBase, "..", "Archivos")
+        self._temp_arriba = None
+        self._temp_abajo = None
 
         # ---------- SETEOS INICIALES
         try:
@@ -35,8 +37,25 @@ class DesprotegerController:
     def refrescarPanel(self):
         self.mainWindow.tableFileDP.setRowCount(0)
         self.cargarTabla()
+        self._limpiarTemps()
+
+    def _limpiarTemps(self):
         self.mainWindow.viewDP.setUrl(QUrl("about:blank"))
         self.mainWindow.viewDP_R.setUrl(QUrl("about:blank"))
+        archivos = [r for r in (self._temp_arriba, self._temp_abajo) if r]
+        self._temp_arriba = None
+        self._temp_abajo = None
+        if archivos:
+            # Delay para que el motor web libere el handle antes de borrar (necesario en Windows)
+            QTimer.singleShot(300, lambda: self._borrarArchivos(archivos))
+
+    def _borrarArchivos(self, rutas):
+        for ruta in rutas:
+            try:
+                if os.path.exists(ruta):
+                    os.remove(ruta)
+            except OSError:
+                pass
 
     def cargarTabla(self):
         extensiones = {".HA1", ".HA2", ".HA3", ".HE1", ".HE2", ".HE3",
@@ -74,6 +93,7 @@ class DesprotegerController:
         if not os.path.exists(ruta):
             return
         extension = os.path.splitext(ruta)[1]
+        self._limpiarTemps()  # borra los temporales anteriores antes de crear los nuevos
         try:
             # Panel superior: decodificado sin tocar errores
             if extension in (".HA1", ".HE1", ".H1E1", ".H2E1"):
@@ -85,6 +105,7 @@ class DesprotegerController:
             previoArriba = os.path.join(self.carpetaArchivos, "_previo_arriba" + tipoArchivo)
             with open(previoArriba, "wb") as f:
                 f.write(sinCorregir)
+            self._temp_arriba = previoArriba
             self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(previoArriba))
 
             # Panel inferior: corregido si se puede, si no popup y muestra igual con errores
@@ -93,6 +114,7 @@ class DesprotegerController:
                 previoAbajo = os.path.join(self.carpetaArchivos, "_previo_abajo" + tipoArchivo)
                 with open(previoAbajo, "wb") as f:
                     f.write(sinCorregir)
+                self._temp_abajo = previoAbajo
                 self.mainWindow.viewDP_R.setUrl(QUrl.fromLocalFile(previoAbajo))
             else:
                 if extension in (".HA1", ".HE1", ".H1E1"):
@@ -104,10 +126,10 @@ class DesprotegerController:
                 previoAbajo = os.path.join(self.carpetaArchivos, "_previo_abajo" + tipoArchivoCorregido)
                 with open(previoAbajo, "wb") as f:
                     f.write(corregido)
+                self._temp_abajo = previoAbajo
                 self.mainWindow.viewDP_R.setUrl(QUrl.fromLocalFile(previoAbajo))
-        except Exception as e:
-            self.mainWindow.viewDP.setUrl(QUrl("about:blank"))
-            self.mainWindow.viewDP_R.setUrl(QUrl("about:blank"))
+        except Exception:
+            self._limpiarTemps()
 
     def _decodificarSinCorregir(self, rutaFile):
         ext = os.path.splitext(rutaFile)[1]
@@ -118,29 +140,23 @@ class DesprotegerController:
 
     def _decodificarHA1SinCorregir(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2
         with open(rutaFile, "rb") as f:
             datos = f.read()
+        payload = datos[TAM_CABECERA:]  # cabecera escrita una sola vez al inicio
         resultado = bytearray()
-        for c in range(0, len(datos), TAM_GRUPO):
-            grupo = datos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
-                break
-            bloque = f"{grupo[TAM_CABECERA]:08b}{grupo[TAM_CABECERA+1]:08b}"
+        for c in range(0, len(payload) - 1, 2):
+            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
             resultado.append(int(self.sacarParidad8(bloque), 2))
         return bytes(resultado)
 
     def _decodificarHA1Corregido(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2
         with open(rutaFile, "rb") as f:
             datos = f.read()
+        payload = datos[TAM_CABECERA:]  # cabecera escrita una sola vez al inicio
         resultado = bytearray()
-        for c in range(0, len(datos), TAM_GRUPO):
-            grupo = datos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
-                break
-            bloque = f"{grupo[TAM_CABECERA]:08b}{grupo[TAM_CABECERA+1]:08b}"
+        for c in range(0, len(payload) - 1, 2):
+            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
             corregido = self.hamming_ver8(bloque)
             resultado.append(int(self.sacarParidad8(corregido), 2))
         return bytes(resultado)
@@ -285,19 +301,15 @@ class DesprotegerController:
 
     def sacarbitsSinCorregir8(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2  # 19 bytes de cabecera + 2 bytes Hamming por byte original
         ext = os.path.splitext(rutaFile)[1]
         esArchivoConError = ext in (".H1E1", ".H2E1")
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        payload = datos_brutos[TAM_CABECERA:]  # cabecera escrita una sola vez al inicio
         decodificado = bytearray()
-        for c in range(0, len(datos_brutos), TAM_GRUPO):
-            grupo = datos_brutos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
-                break
-            bytes_hamming = grupo[TAM_CABECERA:]  # Saltamos los 19 bytes de cabecera
-            bloque = f"{bytes_hamming[0]:08b}{bytes_hamming[1]:08b}"
+        for c in range(0, len(payload) - 1, 2):
+            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
             decodificado.append(int(self.sacarParidad8(bloque), 2))
 
         base = rutaFile if esArchivoConError else os.path.splitext(rutaFile)[0]
@@ -313,19 +325,15 @@ class DesprotegerController:
 
     def sacarbitsCorregir8(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2
         ext = os.path.splitext(rutaFile)[1]
         esArchivoConError = ext in (".H1E1", ".H2E1")
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        payload = datos_brutos[TAM_CABECERA:]  # cabecera escrita una sola vez al inicio
         decodificado = bytearray()
-        for c in range(0, len(datos_brutos), TAM_GRUPO):
-            grupo = datos_brutos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
-                break
-            bytes_hamming = grupo[TAM_CABECERA:]
-            bloque = f"{bytes_hamming[0]:08b}{bytes_hamming[1]:08b}"
+        for c in range(0, len(payload) - 1, 2):
+            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
             corregido = self.hamming_ver8(bloque)
             decodificado.append(int(self.sacarParidad8(corregido), 2))
 
