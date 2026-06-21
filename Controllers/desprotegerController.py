@@ -27,46 +27,69 @@ class DesprotegerController:
         super().__init__()
         self.mainWindow = mainWindow
         self.cargar = Cargar()
-        self.directorioBase = os.path.dirname(os.path.abspath(__file__))
-        self.carpetaArchivos = os.path.join(self.directorioBase, "..", "Archivos")
+        self.directorioBase = os.path.dirname(os.path.abspath(__file__))            # Directorio Actual
+        self.carpetaArchivos = os.path.join(self.directorioBase, "..", "Archivos")  # Carpeta donde se guardan los archivos
 
+<<<<<<< HEAD
+=======
+        # ---------- SETEOS INICIALES ---------------------------------------------------------------------------------------------------------
+>>>>>>> parent of 3a59133 (Desproteger hecho. Probar con todos los .HA pero funciona para to2.)
         try:
-            self.mainWindow.tableFileDP.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-            self.mainWindow.tableFileDP.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-            self.mainWindow.tableFileDP.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
-            self.mainWindow.tableFileDP.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-            self.mainWindow.tableFileDP.setRowCount(0)
-            self.cargarTabla()
+            self.mainWindow.tableFileDP.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)   # Para que la columna ocupe el espacio libre
+            self.mainWindow.tableFileDP.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)  # Para que se selecciones la fila completa
+            self.mainWindow.tableFileDP.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)    # Para que permita seleccionar una fila a la vez
+            self.mainWindow.tableFileDP.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)      # Para que no permita editar las celdas
+            self.mainWindow.tableFileDP.setRowCount(0)  # Limpiar la tabla antes de cargar los datos
+            self.cargarTabla()          # Cargamos la tabla
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo cargar la tabla: {str(e)}")
 
+<<<<<<< HEAD
         self.mainWindow.subirArchivoDP_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
         self.mainWindow.desprotegerArchivoSC_btn.clicked.connect(self.desprotegerSinCorregir)
         self.mainWindow.desprotegerArchivoC_btn.clicked.connect(self.desprotegerCorrigiendo)
+=======
+        # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
+        self.mainWindow.subirArchivoDP_btn.clicked.connect(lambda: self.cargar.seleccionar_y_guardar(self))
+        self.mainWindow.tableFileDP.itemClicked.connect(self.mostrarArchivo)
+>>>>>>> parent of 3a59133 (Desproteger hecho. Probar con todos los .HA pero funciona para to2.)
 
-    def cambiarPanel(self, indice):
+
+    
+    def cambiarPanel (self, indice):
         self.mainWindow.cambiar_pantalla(indice)
 
     def refrescarPanel(self):
         self.mainWindow.tableFileDP.setRowCount(0)
         self.cargarTabla()
         self.mainWindow.viewDP.setUrl(QUrl("about:blank"))
-
+    
     def cargarTabla(self):
-        extensiones = {".HA1", ".HA2", ".HA3", ".HE1", ".HE2", ".HE3",
-                       ".H1E1", ".H1E2", ".H1E3", ".H2E1", ".H2E2", ".H2E3"}
         if os.path.exists(self.carpetaArchivos):
+<<<<<<< HEAD
             for f in os.listdir(self.carpetaArchivos):
                 ext = os.path.splitext(f)[1]
                 ruta = os.path.join(self.carpetaArchivos, f)
                 if ext in extensiones and os.path.isfile(ruta):
                     tamaño = os.path.getsize(ruta)
+=======
+            files = os.listdir(self.carpetaArchivos)
+            for f in files:
+                fileType = os.path.splitext(f)[1]
+                file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
+                if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
+                    # Obtenemos el tamaño de f
+                    tamaño = os.path.getsize(file_path)
+
+                    # Convertir tamaño a formato B, KB o MB
+>>>>>>> parent of 3a59133 (Desproteger hecho. Probar con todos los .HA pero funciona para to2.)
                     if tamaño < 1024:
                         tamaño_str = f"{tamaño} B"
                     elif tamaño < 1024 * 1024:
                         tamaño_str = f"{tamaño / 1024:.2f} KB"
                     else:
                         tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
+<<<<<<< HEAD
                     fila = self.mainWindow.tableFileDP.rowCount()
                     self.mainWindow.tableFileDP.insertRow(fila)
                     self.mainWindow.tableFileDP.setItem(fila, 0, QTableWidgetItem(f))
@@ -404,3 +427,27 @@ class DesprotegerController:
         trama[-1] = "1" if s % 2 == 0 else "0"
         trama1[-1] = "1" if s1 % 2 == 0 else "0"
         return "".join(trama) + "".join(trama1)
+=======
+                    
+                    # Agregamos el archivo a la tabla
+                    rowPosition = self.mainWindow.tableFileDP.rowCount()
+                    self.mainWindow.tableFileDP.insertRow(rowPosition)
+                    self.mainWindow.tableFileDP.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
+                    self.mainWindow.tableFileDP.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
+
+    def obtenerSeleccionado(self):
+        selectedRows = self.mainWindow.tableFileDP.selectionModel().selectedRows()
+        if selectedRows:
+            row = selectedRows[0].row()
+            nombreArchivo = self.mainWindow.tableFileDP.item(row, 0).text()
+            return nombreArchivo
+        return None
+
+    def mostrarArchivo(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        ruta_completa = os.path.join(self.carpetaArchivos, nombreArchivo)
+        if os.path.exists(ruta_completa):
+            url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
+            self.mainWindow.viewDP.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
+
+>>>>>>> parent of 3a59133 (Desproteger hecho. Probar con todos los .HA pero funciona para to2.)

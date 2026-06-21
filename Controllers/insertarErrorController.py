@@ -93,34 +93,23 @@ class InsertarErrorController:
             with open(rutaFile, "rb") as archivo:
                 contenido = archivo.read()
             datos = bytearray(contenido)
-            TAM_CABECERA = 19
+            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
+            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
             probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
-            prob = probabilidades[extension]
 
-            if extension == ".HA1":
-                # HA1: grupos de 2 bytes Hamming por byte original, byte-alineados
-                for i in range(TAM_CABECERA, len(datos), 2):
-                    if i + 2 > len(datos):
-                        break
-                    if random.random() < prob:
-                        byteError = random.randint(i, i + 1)
-                        bitError = random.randint(0, 7)
-                        datos[byteError] ^= (1 << bitError)
-            else:
-                # HA2/HA3: los bloques Hamming son 1035/16399 bits, no múltiplos de 8.
-                # Hay que operar a nivel de bit para no cruzar fronteras de bloque.
-                tamBloquesBits = {".HA2": 1035, ".HA3": 16399}
-                tam_bloque_bits = tamBloquesBits[extension]
-                bit_total = (len(datos) - TAM_CABECERA) * 8
-                num_bloques = bit_total // tam_bloque_bits
-                for h in range(num_bloques):
-                    if random.random() < prob:
-                        bit_en_bloque = random.randint(0, tam_bloque_bits - 1)
-                        bit_abs = h * tam_bloque_bits + bit_en_bloque
-                        byte_pos = TAM_CABECERA + bit_abs // 8
-                        bit_en_byte = 7 - (bit_abs % 8)  # f"{byte:08b}" pone el MSB primero
-                        datos[byte_pos] ^= (1 << bit_en_byte)
+            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
+            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
 
+            # Insertamos el error saltandonos el header con la fecha de apertura
+            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
+                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
+                if random.random() < prob:
+                    # Elegimos el bit a modificar
+                    byteError = random.randint(i, limite - 1)
+                    bitError = random.randint(0, 7)
+                    # Invertimos el bit de la posicion elegida
+                    datos[byteError] ^= (1 << bitError)
+            # Guardamos el nuevo archivo con el error insertado
             match extension:
                 case ".HA1":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E1"
@@ -150,35 +139,31 @@ class InsertarErrorController:
             with open(rutaFile, "rb") as archivo:
                 contenido = archivo.read()
             datos = bytearray(contenido)
-            TAM_CABECERA = 19
+            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
+            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
             probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
-            prob = probabilidades[extension]
 
-            if extension == ".HA1":
-                for i in range(TAM_CABECERA, len(datos), 2):
-                    if i + 2 > len(datos):
-                        break
-                    if random.random() < prob:
-                        datos[i] ^= (1 << 2)
-                        datos[i] ^= (1 << 5)
-            else:
-                tamBloquesBits = {".HA2": 1035, ".HA3": 16399}
-                tam_bloque_bits = tamBloquesBits[extension]
-                bit_total = (len(datos) - TAM_CABECERA) * 8
-                num_bloques = bit_total // tam_bloque_bits
-                for h in range(num_bloques):
-                    if random.random() < prob:
-                        # Dos posiciones distintas dentro del bloque
-                        pos1 = random.randint(0, tam_bloque_bits - 1)
-                        pos2 = random.randint(0, tam_bloque_bits - 2)
-                        if pos2 >= pos1:
-                            pos2 += 1
-                        for bit_en_bloque in (pos1, pos2):
-                            bit_abs = h * tam_bloque_bits + bit_en_bloque
-                            byte_pos = TAM_CABECERA + bit_abs // 8
-                            bit_en_byte = 7 - (bit_abs % 8)
-                            datos[byte_pos] ^= (1 << bit_en_byte)
+            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
+            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
 
+            # Insertamos el error saltandonos el header con la fecha de apertura
+            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
+                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
+                if random.random() < prob:
+                # Primer error
+                    # Elegimos el bit a modificar
+                    byteError1 = i
+                    bitError1 = 2   # Bit de dato
+                    # Invertimos el bit de la posicion elegida
+                    datos[byteError1] ^= (1 << bitError1)
+                # Segundo Error
+                    # Elegimos el bit a modificar
+                    byteError2 = i
+                    bitError2 = 5   # Bit de dato
+                    # Invertimos el bit de la posicion elegida
+                    datos[byteError2] ^= (1 << bitError2)
+
+            # Guardamos el nuevo archivo con el error insertado
             match extension:
                 case ".HA1":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E1"
