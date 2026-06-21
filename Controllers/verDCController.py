@@ -41,7 +41,7 @@ class VerDCController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                if fileType in [".txt",".pdf",".jpg",".png"]:
+                if fileType in [".txt",".pdf",".jpg",".png",".zip"]:
                     file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
                     if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
                         # Obtenemos el tamaño de f

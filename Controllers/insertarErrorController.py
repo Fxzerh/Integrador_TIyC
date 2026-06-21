@@ -45,24 +45,25 @@ class InsertarErrorController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
-                if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
-                    # Obtenemos el tamaño de f
-                    tamaño = os.path.getsize(file_path)
+                if fileType in [".HA1",".HA2",".HA3"]:
+                    file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
+                    if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
+                        # Obtenemos el tamaño de f
+                        tamaño = os.path.getsize(file_path)
 
-                    # Convertir tamaño a formato B, KB o MB
-                    if tamaño < 1024:
-                        tamaño_str = f"{tamaño} B"
-                    elif tamaño < 1024 * 1024:
-                        tamaño_str = f"{tamaño / 1024:.2f} KB"
-                    else:
-                        tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
-                    
-                    # Agregamos el archivo a la tabla
-                    rowPosition = self.mainWindow.tableFileIE.rowCount()
-                    self.mainWindow.tableFileIE.insertRow(rowPosition)
-                    self.mainWindow.tableFileIE.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
-                    self.mainWindow.tableFileIE.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
+                        # Convertir tamaño a formato B, KB o MB
+                        if tamaño < 1024:
+                            tamaño_str = f"{tamaño} B"
+                        elif tamaño < 1024 * 1024:
+                            tamaño_str = f"{tamaño / 1024:.2f} KB"
+                        else:
+                            tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
+                        
+                        # Agregamos el archivo a la tabla
+                        rowPosition = self.mainWindow.tableFileIE.rowCount()
+                        self.mainWindow.tableFileIE.insertRow(rowPosition)
+                        self.mainWindow.tableFileIE.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
+                        self.mainWindow.tableFileIE.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
     
     def obtenerSeleccionado(self):
         selectedRows = self.mainWindow.tableFileIE.selectionModel().selectedRows()

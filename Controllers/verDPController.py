@@ -53,7 +53,7 @@ class VerDPController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                if fileType in [".txt",".pdf",".jpg",".png"]:
+                if fileType in [".txt",".pdf",".jpg",".png",".zip"]:
                     file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
                     if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
                         # Obtenemos el tamaño de f
@@ -91,6 +91,9 @@ class VerDPController:
         if os.path.exists(rutaCompleta):
             if corregir:
                 self.corregido = True
+                self.mainWindow.m8VDP_btn.setEnabled(True)
+                self.mainWindow.m1024VDP_btn.setEnabled(True)
+                self.mainWindow.m16384VDP_btn.setEnabled(True)
                 for i in range(1,4):
                     rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DC" + str(i))
                     if os.path.exists(rutaRecuperado):
@@ -101,6 +104,9 @@ class VerDPController:
                         break
             else:
                 self.corregido = False
+                self.mainWindow.m8VDP_btn.setEnabled(True)
+                self.mainWindow.m1024VDP_btn.setEnabled(True)
+                self.mainWindow.m16384VDP_btn.setEnabled(True)
                 for i in range(1,4):
                     rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DE" + str(i))
                     if os.path.exists(rutaRecuperado):
