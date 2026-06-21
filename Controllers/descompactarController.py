@@ -51,24 +51,25 @@ class DescompactarController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
-                if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
-                    # Obtenemos el tamaño de f
-                    tamaño = os.path.getsize(file_path)
+                if fileType in [".huf"]:
+                    file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
+                    if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
+                        # Obtenemos el tamaño de f
+                        tamaño = os.path.getsize(file_path)
 
-                    # Convertir tamaño a formato B, KB o MB
-                    if tamaño < 1024:
-                        tamaño_str = f"{tamaño} B"
-                    elif tamaño < 1024 * 1024:
-                        tamaño_str = f"{tamaño / 1024:.2f} KB"
-                    else:
-                        tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
-                    
-                    # Agregamos el archivo a la tabla
-                    rowPosition = self.mainWindow.tableFileDC.rowCount()
-                    self.mainWindow.tableFileDC.insertRow(rowPosition)
-                    self.mainWindow.tableFileDC.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
-                    self.mainWindow.tableFileDC.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
+                        # Convertir tamaño a formato B, KB o MB
+                        if tamaño < 1024:
+                            tamaño_str = f"{tamaño} B"
+                        elif tamaño < 1024 * 1024:
+                            tamaño_str = f"{tamaño / 1024:.2f} KB"
+                        else:
+                            tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
+                        
+                        # Agregamos el archivo a la tabla
+                        rowPosition = self.mainWindow.tableFileDC.rowCount()
+                        self.mainWindow.tableFileDC.insertRow(rowPosition)
+                        self.mainWindow.tableFileDC.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
+                        self.mainWindow.tableFileDC.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
     
     def obtenerSeleccionado(self):
         selectedRows = self.mainWindow.tableFileDC.selectionModel().selectedRows()

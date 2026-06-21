@@ -1,11 +1,7 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import QUrl, QTimer
 from Clases.cargarArchivo import Cargar
-import json
 import os
-
-
-EXTENSIONES_VISIBLES = {'.dhu', '.DC1', '.DC2', '.DC3', '.DE1', '.DE2', '.DE3'}
 
 
 class VerDPController:
@@ -15,10 +11,13 @@ class VerDPController:
         self.cargar = Cargar()
         self.directorioBase = os.path.dirname(os.path.abspath(__file__))
         self.carpetaArchivos = os.path.join(self.directorioBase, "..", "Archivos")
-        self._temp_arriba = None
-        self._temp_abajo = None
+        self.corregido = True
 
+        # ---------- SETEOS INICIALES ---------------------------------------------------------------------------------------------------------
         try:
+            self.mainWindow.m8VDP_btn.setEnabled(False)
+            self.mainWindow.m1024VDP_btn.setEnabled(False)
+            self.mainWindow.m16384VDP_btn.setEnabled(False)
             self.mainWindow.tableFileVDP.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
             self.mainWindow.tableFileVDP.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
             self.mainWindow.tableFileVDP.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
@@ -28,7 +27,14 @@ class VerDPController:
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo cargar la tabla: {str(e)}")
 
-        self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrarArchivo)
+        # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
+        #self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrarArchivo())
+        self.mainWindow.sinCorregirVDP_btn.clicked.connect(lambda: self.mostrarArchivo(False))
+        self.mainWindow.corregidoVDP_btn.clicked.connect(lambda: self.mostrarArchivo(True))
+        self.mainWindow.m8VDP_btn.clicked.connect(lambda: self.mostrarDesprotegido(1))
+        self.mainWindow.m1024VDP_btn.clicked.connect(lambda: self.mostrarDesprotegido(2))
+        self.mainWindow.m16384VDP_btn.clicked.connect(lambda: self.mostrarDesprotegido(3))
+
 
     def cambiarPanel(self, indice):
         self.mainWindow.cambiar_pantalla(indice)
@@ -36,287 +42,87 @@ class VerDPController:
     def refrescarPanel(self):
         self.mainWindow.tableFileVDP.setRowCount(0)
         self.cargarTabla()
-        self._limpiarTemps()
-
-    def _limpiarTemps(self):
         self.mainWindow.viewVDP_O.setUrl(QUrl("about:blank"))
         self.mainWindow.viewVDP_R.setUrl(QUrl("about:blank"))
-        archivos = [r for r in (self._temp_arriba, self._temp_abajo) if r]
-        self._temp_arriba = None
-        self._temp_abajo = None
-        if archivos:
-            QTimer.singleShot(300, lambda: self._borrarArchivos(archivos))
-
-    def _borrarArchivos(self, rutas):
-        for ruta in rutas:
-            try:
-                if os.path.exists(ruta):
-                    os.remove(ruta)
-            except OSError:
-                pass
+        self.mainWindow.m8VDP_btn.setEnabled(False)
+        self.mainWindow.m1024VDP_btn.setEnabled(False)
+        self.mainWindow.m16384VDP_btn.setEnabled(False)
 
     def cargarTabla(self):
         if os.path.exists(self.carpetaArchivos):
-            for f in sorted(os.listdir(self.carpetaArchivos)):
-                ext = os.path.splitext(f)[1]
-                ruta = os.path.join(self.carpetaArchivos, f)
-                if os.path.isfile(ruta) and ext in EXTENSIONES_VISIBLES:
-                    tamaño = os.path.getsize(ruta)
-                    if tamaño < 1024:
-                        tamaño_str = f"{tamaño} B"
-                    elif tamaño < 1024 * 1024:
-                        tamaño_str = f"{tamaño / 1024:.2f} KB"
-                    else:
-                        tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
-                    fila = self.mainWindow.tableFileVDP.rowCount()
-                    self.mainWindow.tableFileVDP.insertRow(fila)
-                    self.mainWindow.tableFileVDP.setItem(fila, 0, QTableWidgetItem(f))
-                    self.mainWindow.tableFileVDP.setItem(fila, 1, QTableWidgetItem(tamaño_str))
+            files = os.listdir(self.carpetaArchivos)
+            for f in files:
+                fileType = os.path.splitext(f)[1]
+                if fileType in [".txt",".pdf",".jpg",".png"]:
+                    file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
+                    if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
+                        # Obtenemos el tamaño de f
+                        tamaño = os.path.getsize(file_path)
+
+                        # Convertir tamaño a formato B, KB o MB
+                        if tamaño < 1024:
+                            tamaño_str = f"{tamaño} B"
+                        elif tamaño < 1024 * 1024:
+                            tamaño_str = f"{tamaño / 1024:.2f} KB"
+                        else:
+                            tamaño_str = f"{tamaño / (1024 * 1024):.2f} MB"
+                        
+                        # Agregamos el archivo a la tabla
+                        rowPosition = self.mainWindow.tableFileVDP.rowCount()
+                        self.mainWindow.tableFileVDP.insertRow(rowPosition)
+                        self.mainWindow.tableFileVDP.setItem(rowPosition, 0, QTableWidgetItem(f))             # Nombre
+                        self.mainWindow.tableFileVDP.setItem(rowPosition, 1, QTableWidgetItem(tamaño_str))    # Tamaño
 
     def obtenerSeleccionado(self):
-        filas = self.mainWindow.tableFileVDP.selectionModel().selectedRows()
-        if filas:
-            return self.mainWindow.tableFileVDP.item(filas[0].row(), 0).text()
+        selectedRows = self.mainWindow.tableFileVDP.selectionModel().selectedRows()
+        if selectedRows:
+            row = selectedRows[0].row()
+            nombreArchivo = self.mainWindow.tableFileVDP.item(row, 0).text()
+            return nombreArchivo
         return None
-
-    def mostrarArchivo(self):
-        nombre = self.obtenerSeleccionado()
-        if not nombre:
+    
+    def mostrarArchivo(self, corregir):
+        nombreArchivo = self.obtenerSeleccionado()
+        if not nombreArchivo:
+            QMessageBox.warning(self.mainWindow, "Aviso", "No se ha seleccionado ningún archivo.")
             return
-        marcador = os.path.splitext(nombre)[1]
-        self._limpiarTemps()
-
-        ruta = os.path.join(self.carpetaArchivos, nombre)
-        if not os.path.exists(ruta):
-            QMessageBox.warning(self.mainWindow, "Aviso", "El archivo no existe.")
+        nombre = os.path.splitext(nombreArchivo)[0]
+        rutaCompleta = os.path.join(self.carpetaArchivos, nombreArchivo)
+        if os.path.exists(rutaCompleta):
+            if corregir:
+                self.corregido = True
+                for i in range(1,4):
+                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DC" + str(i))
+                    if os.path.exists(rutaRecuperado):
+                        url_local1 = QUrl.fromLocalFile(rutaCompleta)       # Transformamos la ruta del archivo original a una URL que entienda el componente web        
+                        url_local2 = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
+                        self.mainWindow.viewVDP_O.setUrl(url_local1)        # Setteamos la vista web que lo dibuje en pantalla
+                        self.mainWindow.viewVDP_R.setUrl(url_local2)
+                        break
+            else:
+                self.corregido = False
+                for i in range(1,4):
+                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DE" + str(i))
+                    if os.path.exists(rutaRecuperado):
+                        url_local1 = QUrl.fromLocalFile(rutaCompleta)       # Transformamos la ruta del archivo original a una URL que entienda el componente web        
+                        url_local2 = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
+                        self.mainWindow.viewVDP_O.setUrl(url_local1)        # Setteamos la vista web que lo dibuje en pantalla
+                        self.mainWindow.viewVDP_R.setUrl(url_local2)
+                        break
+    
+    def mostrarDesprotegido(self, modulo):
+        nombreArchivo = self.obtenerSeleccionado()
+        if not nombreArchivo:
+            QMessageBox.warning(self.mainWindow, "Aviso", "No se ha seleccionado ningún archivo.")
             return
-
-        if marcador == '.dhu':
-            self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(ruta))
-            return
-
-        # .DC* / .DE*: already decoded — show directly without date check
-        try:
-            with open(ruta, "rb") as f:
-                datos = f.read()
-            ext = self.detectarExtension(datos)
-            tempFile = os.path.join(self.carpetaArchivos, "_vdp_temp" + ext)
-            with open(tempFile, "wb") as f:
-                f.write(datos)
-            self._temp_arriba = tempFile
-            self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(tempFile))
-        except Exception as e:
-            self._limpiarTemps()
-            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo mostrar el archivo: {str(e)}")
-
-    # ---- Decodificadores Hamming en memoria ----
-
-    def _decodificarBytesHA1SinCorregir(self, datos):
-        TAM_CABECERA = 19
-        payload = datos[TAM_CABECERA:]
-        resultado = bytearray()
-        for c in range(0, len(payload) - 1, 2):
-            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
-            resultado.append(int(self.sacarParidad8(bloque), 2))
-        return bytes(resultado)
-
-    def _decodificarBytesHA1Corregido(self, datos):
-        TAM_CABECERA = 19
-        payload = datos[TAM_CABECERA:]
-        resultado = bytearray()
-        for c in range(0, len(payload) - 1, 2):
-            bloque = f"{payload[c]:08b}{payload[c+1]:08b}"
-            corregido = self.hamming_ver8(bloque)
-            resultado.append(int(self.sacarParidad8(corregido), 2))
-        return bytes(resultado)
-
-    def _decodificarBytesHA2_3SinCorregir(self, datos, extension):
-        TAM_CABECERA = 19
-        tamBloque = 1024 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
-        bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
-        l1 = ""
-        for c in range(0, len(bits), tamBloque):
-            bloque = bits[c:c + tamBloque]
-            if len(bloque) < tamBloque:
-                break
-            l1 += self.sacarParidad(bloque)
-        return bytes(int(l1[k:k+8], 2) for k in range(0, len(l1) - len(l1) % 8, 8))
-
-    def _decodificarBytesHA2_3Corregido(self, datos, extension):
-        TAM_CABECERA = 19
-        tamBloque = 1024 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
-        bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
-        l1 = ""
-        for c in range(0, len(bits), tamBloque):
-            bloque = bits[c:c + tamBloque]
-            if len(bloque) < tamBloque:
-                break
-            sindrome = self.calcularSindrome(bloque)
-            if 0 < sindrome <= len(bloque):
-                lst = list(bloque)
-                lst[sindrome - 1] = '0' if lst[sindrome - 1] == '1' else '1'
-                bloque = ''.join(lst)
-            l1 += self.sacarParidad(bloque)
-        return bytes(int(l1[k:k+8], 2) for k in range(0, len(l1) - len(l1) % 8, 8))
-
-    # ---- Detección de tipo de archivo ----
-
-    def _esHuffman(self, datos):
-        try:
-            if len(datos) < 6:
-                return False
-            padding = datos[0]
-            if padding > 7:
-                return False
-            longDic = int.from_bytes(datos[1:5], byteorder='big')
-            if longDic <= 0 or 5 + longDic > len(datos):
-                return False
-            json.loads(datos[5:5 + longDic].decode())
-            return True
-        except Exception:
-            return False
-
-    def detectarExtension(self, datos):
-        if datos[:4] == b'%PDF':
-            return '.pdf'
-        if datos[:8] == b'\x89PNG\r\n\x1a\n':
-            return '.png'
-        if datos[:2] == b'\xff\xd8':
-            return '.jpg'
-        if datos[:4] in (b'PK\x03\x04', b'PK\x05\x06', b'PK\x07\x08'):
-            return '.zip'
-        if self._esHuffman(datos):
-            return '.huf'
-        try:
-            datos[:512].decode('utf-8')
-            return '.txt'
-        except (UnicodeDecodeError, ValueError):
-            return '.bin'
-
-    # ---- Funciones auxiliares de Hamming ----
-
-    def sacarParidad(self, l):
-        j = 0
-        x = ""
-        for s in range(len(l)):
-            if 2 ** j == s + 1:
-                j += 1
+        nombre = os.path.splitext(nombreArchivo)[0]
+        rutaCompleta = os.path.join(self.carpetaArchivos, nombreArchivo)
+        if os.path.exists(rutaCompleta):
+            if self.corregido:
+                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DC" + modulo)
+                url_local = QUrl.fromLocalFile(rutaRecuperado)
+                self.mainWindow.viewVDP_R.setUrl(url_local)
             else:
-                x += l[s]
-        return x
-
-    def sacarParidad8(self, l):
-        j = 0
-        x = ""
-        x1 = ""
-        y = l[0:8]
-        y1 = l[8:16]
-        for i in range(8):
-            if 2 ** j == i + 1:
-                j += 1
-            else:
-                x += y[i]
-                x1 += y1[i]
-        x += x1
-        return x
-
-    def calcularSindrome(self, bloque):
-        n = len(bloque)
-        sindrome = 0
-        potencia = 1
-        while potencia <= n:
-            paridad = 0
-            pos = potencia - 1
-            while pos < n:
-                for j in range(pos, min(pos + potencia, n)):
-                    paridad ^= int(bloque[j])
-                pos += 2 * potencia
-            if paridad:
-                sindrome |= potencia
-            potencia <<= 1
-        return sindrome
-
-    def hamming_ver8(self, n1):
-        j = 0
-        x = ""
-        x1 = ""
-        y_bloque = n1[0:8]
-        y1_bloque = n1[8:16]
-        for i in range(8):
-            if 2 ** j == i + 1:
-                j += 1
-            else:
-                x += y_bloque[i]
-                x1 += y1_bloque[i]
-        x += x1
-        l = self.hamminization(x)
-        if l != n1:
-            listapp = list(n1)
-            if l[0:8] != y_bloque:
-                i = 1
-                y_sin = ""
-                z_sin = ""
-                j = 0
-                while i <= 4:
-                    y_sin += y_bloque[i - 1]
-                    z_sin += l[0:8][i - 1]
-                    j += 1
-                    i = 2 ** j
-                xy = "".join(str(int(y_sin[k]) ^ int(z_sin[k])) for k in range(len(y_sin)))
-                xy_r = int(xy[::-1], 2)
-                if 0 < xy_r <= 7:
-                    listapp[xy_r - 1] = '1' if listapp[xy_r - 1] == '0' else '1'
-            if l[8:16] != y1_bloque:
-                i = 1
-                y_sin = ""
-                z_sin = ""
-                j = 0
-                while i <= 4:
-                    y_sin += y1_bloque[i - 1]
-                    z_sin += l[8:16][i - 1]
-                    j += 1
-                    i = 2 ** j
-                xy = "".join(str(int(y_sin[k]) ^ int(z_sin[k])) for k in range(len(y_sin)))
-                xy_r = int(xy[::-1], 2)
-                if 0 < xy_r <= 7:
-                    listapp[8 + xy_r - 1] = '1' if listapp[8 + xy_r - 1] == '0' else '1'
-            return "".join(listapp)
-        return n1
-
-    def hamminization(self, n1):
-        long = len(n1)
-        p = 0
-        while 2 ** p < len(n1) + p + 1:
-            p += 1
-        trama1 = ['0'] * long
-        trama = ['0'] * long
-        j = 0
-        for i in range(1, long):
-            if (i & (i - 1)) != 0:
-                trama[i - 1] = n1[j]
-                j += 1
-        for i in range(1, long):
-            if (i & (i - 1)) != 0:
-                trama1[i - 1] = n1[j]
-                j += 1
-        l = 0
-        for l in range(p):
-            i = 2 ** l
-            s = 0
-            s1 = 0
-            for cont1 in range(long):
-                posicion_real = cont1 + 1
-                if (posicion_real & i) != 0 and posicion_real != i:
-                    s ^= int(trama[cont1])
-                    s1 ^= int(trama1[cont1])
-            trama[i - 1] = str(s)
-            trama1[i - 1] = str(s1)
-        s = 0
-        s1 = 0
-        while l < len(trama):
-            s += int(trama[l])
-            s1 += int(trama1[l])
-            l += 1
-        trama[-1] = "1" if s % 2 == 0 else "0"
-        trama1[-1] = "1" if s1 % 2 == 0 else "0"
-        return "".join(trama) + "".join(trama1)
+                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DE" + modulo)
+                url_local = QUrl.fromLocalFile(rutaRecuperado)
+                self.mainWindow.viewVDP_R.setUrl(url_local)

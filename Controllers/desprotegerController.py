@@ -86,6 +86,7 @@ class DesprotegerController:
             else:
                 archivoFinal = self.sacarbitsSinCorregir(rutaFile)
             self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(archivoFinal))
+            QMessageBox.information(self.mainWindow, "Éxito", f"Archivo desprotegido correctamente. \nGuardado en '{os.path.basename(archivoFinal)}'.")
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo desproteger el archivo: {str(e)}")
 
@@ -105,6 +106,7 @@ class DesprotegerController:
             else:
                 archivoFinal = self.sacarbitsCorregido(rutaFile)
             self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(archivoFinal))
+            QMessageBox.information(self.mainWindow, "Éxito", f"Archivo desprotegido correctamente. \nGuardado en '{os.path.basename(archivoFinal)}'.")
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo desproteger el archivo: {str(e)}")
 
