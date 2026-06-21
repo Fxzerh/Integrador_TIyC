@@ -1602,33 +1602,8 @@ QPushButton:hover{
           </property>
          </widget>
         </item>
-        <item row="3" column="2" colspan="3">
+        <item row="3" column="2" rowspan="3" colspan="3">
          <widget class="QWebEngineView" name="viewDP">
-          <property name="url">
-           <url>
-            <string>about:blank</string>
-           </url>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2" colspan="3">
-         <spacer name="verticalSpacer_DP_mid">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>10</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="5" column="2" colspan="3">
-         <widget class="QWebEngineView" name="viewDP_R">
           <property name="url">
            <url>
             <string>about:blank</string>

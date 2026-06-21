@@ -1,9 +1,25 @@
-from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
-from PyQt6.QtCore import QUrl
+from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView, QProgressDialog
+from PyQt6.QtCore import QUrl, QThread, pyqtSignal, Qt
 from Clases.cargarArchivo import Cargar
 from datetime import datetime
 import json
 import os
+
+
+class _DecodWorker(QThread):
+    terminado = pyqtSignal(bytes)
+    error = pyqtSignal(str)
+
+    def __init__(self, fn, *args):
+        super().__init__()
+        self._fn = fn
+        self._args = args
+
+    def run(self):
+        try:
+            self.terminado.emit(self._fn(*self._args))
+        except Exception as e:
+            self.error.emit(str(e))
 
 
 class DesprotegerController:
@@ -66,9 +82,35 @@ class DesprotegerController:
         try:
             fechaTexto = datos[:19].decode('utf-8')
             fechaApertura = datetime.strptime(fechaTexto, "%Y-%m-%d %H:%M:%S")
-            return datetime.now().date() == fechaApertura.date(), fechaTexto
+            return datetime.now() <= fechaApertura, fechaTexto
         except Exception:
             return False, ""
+
+    def _iniciarWorker(self, fn, args, ruta, extension, corregido):
+        self._progreso = QProgressDialog("Desprotegiendo archivo...", None, 0, 0, self.mainWindow)
+        self._progreso.setWindowTitle("Procesando")
+        self._progreso.setWindowModality(Qt.WindowModality.WindowModal)
+        self._progreso.setMinimumDuration(0)
+        self._progreso.setValue(0)
+        self._progreso.show()
+
+        self._worker = _DecodWorker(fn, *args)
+        self._worker.terminado.connect(lambda res: self._alTerminar(res, ruta, extension, corregido))
+        self._worker.error.connect(self._alError)
+        self._worker.start()
+
+    def _alTerminar(self, resultado, ruta, extension, corregido):
+        self._progreso.close()
+        try:
+            rutaMostrar = self._guardarDecodificado(ruta, extension, resultado, corregido=corregido)
+            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(rutaMostrar))
+            QMessageBox.information(self.mainWindow, "Listo", "Desprotección realizada.")
+        except Exception as e:
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo guardar el archivo: {str(e)}")
+
+    def _alError(self, msg):
+        self._progreso.close()
+        QMessageBox.critical(self.mainWindow, "Error", f"No se pudo decodificar el archivo: {msg}")
 
     def desprotegerSinCorregir(self):
         nombre = self.obtenerSeleccionado()
@@ -82,17 +124,15 @@ class DesprotegerController:
                 datos = f.read()
             permitido, fechaTexto = self._verificarFechaApertura(datos)
             if not permitido:
-                QMessageBox.warning(self.mainWindow, "Bloqueado",
-                    f"Este archivo no se puede decodificar hasta el {fechaTexto}.")
+                QMessageBox.warning(self.mainWindow, "Bloqueado", "La fecha de ingreso ya se pasó.")
                 return
-            if extension in (".HA1", ".HE1", ".H1E1", ".H2E1"):
-                resultado = self._decodificarBytesHA1SinCorregir(datos)
-            else:
-                resultado = self._decodificarBytesHA2_3SinCorregir(datos, extension)
-            rutaMostrar = self._guardarDecodificado(ruta, extension, resultado, corregido=False)
-            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(rutaMostrar))
         except Exception as e:
-            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo decodificar el archivo: {str(e)}")
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo leer el archivo: {str(e)}")
+            return
+        if extension in (".HA1", ".HE1", ".H1E1", ".H2E1"):
+            self._iniciarWorker(self._decodificarBytesHA1SinCorregir, (datos,), ruta, extension, False)
+        else:
+            self._iniciarWorker(self._decodificarBytesHA2_3SinCorregir, (datos, extension), ruta, extension, False)
 
     def desprotegerCorrigiendo(self):
         nombre = self.obtenerSeleccionado()
@@ -109,17 +149,15 @@ class DesprotegerController:
                 datos = f.read()
             permitido, fechaTexto = self._verificarFechaApertura(datos)
             if not permitido:
-                QMessageBox.warning(self.mainWindow, "Bloqueado",
-                    f"Este archivo no se puede decodificar hasta el {fechaTexto}.")
+                QMessageBox.warning(self.mainWindow, "Bloqueado", "La fecha de ingreso ya se pasó.")
                 return
-            if extension in (".HA1", ".HE1", ".H1E1"):
-                resultado = self._decodificarBytesHA1Corregido(datos)
-            else:
-                resultado = self._decodificarBytesHA2_3Corregido(datos, extension)
-            rutaMostrar = self._guardarDecodificado(ruta, extension, resultado, corregido=True)
-            self.mainWindow.viewDP.setUrl(QUrl.fromLocalFile(rutaMostrar))
         except Exception as e:
-            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo decodificar el archivo: {str(e)}")
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo leer el archivo: {str(e)}")
+            return
+        if extension in (".HA1", ".HE1", ".H1E1"):
+            self._iniciarWorker(self._decodificarBytesHA1Corregido, (datos,), ruta, extension, True)
+        else:
+            self._iniciarWorker(self._decodificarBytesHA2_3Corregido, (datos, extension), ruta, extension, True)
 
     def _guardarDecodificado(self, ruta, extension, datos, corregido):
         tieneError = extension in (".H1E1", ".H2E1", ".H1E2", ".H2E2", ".H1E3", ".H2E3")
@@ -178,7 +216,7 @@ class DesprotegerController:
 
     def _decodificarBytesHA2_3SinCorregir(self, datos, extHamming):
         TAM_CABECERA = 19
-        tamBloque = 1035 if extHamming in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        tamBloque = 1024 if extHamming in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
         bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
         l1 = ""
         for c in range(0, len(bits), tamBloque):
@@ -190,7 +228,7 @@ class DesprotegerController:
 
     def _decodificarBytesHA2_3Corregido(self, datos, extHamming):
         TAM_CABECERA = 19
-        tamBloque = 1035 if extHamming in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        tamBloque = 1024 if extHamming in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
         bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
         l1 = ""
         for c in range(0, len(bits), tamBloque):

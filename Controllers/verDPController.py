@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import QUrl, QTimer
 from Clases.cargarArchivo import Cargar
-from datetime import datetime
 import json
 import os
 
@@ -80,14 +79,6 @@ class VerDPController:
             return self.mainWindow.tableFileVDP.item(filas[0].row(), 0).text()
         return None
 
-    def _verificarFechaApertura(self, datos):
-        try:
-            fechaTexto = datos[:19].decode('utf-8')
-            fechaApertura = datetime.strptime(fechaTexto, "%Y-%m-%d %H:%M:%S")
-            return datetime.now().date() == fechaApertura.date(), fechaTexto
-        except Exception:
-            return False, ""
-
     def mostrarArchivo(self):
         nombre = self.obtenerSeleccionado()
         if not nombre:
@@ -95,76 +86,28 @@ class VerDPController:
         marcador = os.path.splitext(nombre)[1]
         self._limpiarTemps()
 
-        # Archivos Huffman descomprimidos: solo mostrar en panel inferior
+        ruta = os.path.join(self.carpetaArchivos, nombre)
+        if not os.path.exists(ruta):
+            QMessageBox.warning(self.mainWindow, "Aviso", "El archivo no existe.")
+            return
+
         if marcador == '.dhu':
-            ruta = os.path.join(self.carpetaArchivos, nombre)
-            if os.path.exists(ruta):
-                self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(ruta))
+            self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(ruta))
             return
 
-        # Archivos .DC* o .DE*: buscar el archivo Hamming original
-        rutaHamming = os.path.join(self.carpetaArchivos, os.path.splitext(nombre)[0])
-        if not os.path.exists(rutaHamming):
-            QMessageBox.warning(self.mainWindow, "Aviso",
-                "No se encontró el archivo Hamming original para este registro.")
-            return
-
-        extHamming = os.path.splitext(rutaHamming)[1]
+        # .DC* / .DE*: already decoded — show directly without date check
         try:
-            with open(rutaHamming, "rb") as f:
-                datosHamming = f.read()
-
-            permitido, fechaTexto = self._verificarFechaApertura(datosHamming)
-            if not permitido:
-                QMessageBox.warning(self.mainWindow, "Bloqueado",
-                    f"Este archivo solo puede verse el {fechaTexto}.\n"
-                    "Antes o después de esa fecha no es posible decodificarlo.")
-                return
-
-            # Panel superior: siempre decodificado sin corregir errores
-            if extHamming in (".HA1", ".HE1", ".H1E1", ".H2E1"):
-                sinCorregir = self._decodificarBytesHA1SinCorregir(datosHamming)
-            else:
-                sinCorregir = self._decodificarBytesHA2_3SinCorregir(datosHamming, extHamming)
-
-            tipoArriba = self.detectarExtension(sinCorregir)
-            tempArriba = os.path.join(self.carpetaArchivos, "_vdp_arriba" + tipoArriba)
-            with open(tempArriba, "wb") as f:
-                f.write(sinCorregir)
-            self._temp_arriba = tempArriba
-            self.mainWindow.viewVDP_O.setUrl(QUrl.fromLocalFile(tempArriba))
-
-            # Panel inferior
-            if extHamming in (".H2E1", ".H2E2", ".H2E3"):
-                # 2 errores: no se puede corregir, mostrar igual que arriba
-                QMessageBox.warning(self.mainWindow, "Aviso", "Tiene 2 o más errores, no puede ser arreglado.")
-                tempAbajo = os.path.join(self.carpetaArchivos, "_vdp_abajo" + tipoArriba)
-                with open(tempAbajo, "wb") as f:
-                    f.write(sinCorregir)
-                self._temp_abajo = tempAbajo
-                self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(tempAbajo))
-            elif marcador.startswith('.DC'):
-                # Archivo con corrección: panel inferior muestra con error corregido
-                if extHamming in (".HA1", ".HE1", ".H1E1"):
-                    corregido = self._decodificarBytesHA1Corregido(datosHamming)
-                else:
-                    corregido = self._decodificarBytesHA2_3Corregido(datosHamming, extHamming)
-                tipoAbajo = self.detectarExtension(corregido)
-                tempAbajo = os.path.join(self.carpetaArchivos, "_vdp_abajo" + tipoAbajo)
-                with open(tempAbajo, "wb") as f:
-                    f.write(corregido)
-                self._temp_abajo = tempAbajo
-                self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(tempAbajo))
-            else:
-                # Archivo .DE: sin corrección en ambos paneles
-                tempAbajo = os.path.join(self.carpetaArchivos, "_vdp_abajo" + tipoArriba)
-                with open(tempAbajo, "wb") as f:
-                    f.write(sinCorregir)
-                self._temp_abajo = tempAbajo
-                self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(tempAbajo))
-
-        except Exception:
+            with open(ruta, "rb") as f:
+                datos = f.read()
+            ext = self.detectarExtension(datos)
+            tempFile = os.path.join(self.carpetaArchivos, "_vdp_temp" + ext)
+            with open(tempFile, "wb") as f:
+                f.write(datos)
+            self._temp_arriba = tempFile
+            self.mainWindow.viewVDP_R.setUrl(QUrl.fromLocalFile(tempFile))
+        except Exception as e:
             self._limpiarTemps()
+            QMessageBox.critical(self.mainWindow, "Error", f"No se pudo mostrar el archivo: {str(e)}")
 
     # ---- Decodificadores Hamming en memoria ----
 
@@ -189,7 +132,7 @@ class VerDPController:
 
     def _decodificarBytesHA2_3SinCorregir(self, datos, extension):
         TAM_CABECERA = 19
-        tamBloque = 1035 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        tamBloque = 1024 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
         bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
         l1 = ""
         for c in range(0, len(bits), tamBloque):
@@ -201,7 +144,7 @@ class VerDPController:
 
     def _decodificarBytesHA2_3Corregido(self, datos, extension):
         TAM_CABECERA = 19
-        tamBloque = 1035 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16399
+        tamBloque = 1024 if extension in (".HA2", ".HE2", ".H1E2", ".H2E2") else 16384
         bits = "".join(f"{b:08b}" for b in datos[TAM_CABECERA:])
         l1 = ""
         for c in range(0, len(bits), tamBloque):
