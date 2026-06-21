@@ -125,9 +125,16 @@ class CompactarController:
                     # Convertimos la llave 'k' a string y le asignamos el valor 'v'
                     llave_string = str(k)
                     dicParaJson[llave_string] = v
-                
+
                 dicBytes = json.dumps(dicParaJson).encode()
-                nombreFile = os.path.splitext(nombreArchivo)[0]  # Obtener el nombre del archivo sin la extensión
+                # Si el archivo tiene extension Hamming, la conservamos en el nombre para poder revertir el proceso
+                extensiones_hamming = {".HA1", ".HA2", ".HA3", ".HE1", ".HE2", ".HE3",
+                                       ".H1E1", ".H1E2", ".H1E3", ".H2E1", ".H2E2", ".H2E3"}
+                ext_origen = os.path.splitext(nombreArchivo)[1]
+                if ext_origen in extensiones_hamming:
+                    nombreFile = nombreArchivo          # foto.HA2 → foto.HA2.huf
+                else:
+                    nombreFile = os.path.splitext(nombreArchivo)[0]  # foto.pdf → foto.huf
                 #  Formato del archivo comprimido: [Header][Contenido Comprimido]
                 with open(os.path.join(self.carpetaArchivos, nombreFile + ".huf"), "wb") as f:
                     # Agregamos el header 
@@ -136,10 +143,10 @@ class CompactarController:
                     f.write(dicBytes)                                       # Guardamos el diccionario de caracteres en el header
                     # Agregamos el contenido comprimido
                     f.write(bytesComprimidos)  
-                self.dicCaracteres = {}     # Limpiamos el diccionario de caracteres para la proxima compresion
-                self.tablaCodigos = {}      # Limpiamos la tabla de codigos para la proxima compresion                                 
+                self.dicCaracteres = {}
+                self.tablaCodigos = {}
                 self.refrescarPanel()
-                QMessageBox.information(self.mainWindow, "Éxito", f"Archivo comprimido con Huffman correctamente. \nGuardado en '{nombreFile}.huf'.")               
+                QMessageBox.information(self.mainWindow, "Éxito", f"Archivo comprimido con Huffman correctamente. \nGuardado en '{nombreFile}.huf'.")
                 
             else:
                 QMessageBox.warning(self.mainWindow, "Error", "El archivo no existe en la ruta especificada.")

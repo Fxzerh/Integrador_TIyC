@@ -117,7 +117,13 @@ class ProtegerController:
         if not fechaHoraLimite:     # Si no se ingresa una fecha de apertura, se cancela el proceso
             return
 
-        nombreFile = os.path.splitext(self.fileSelect)[0]
+        # Si el archivo ya tiene una extensión reconocible (ej: .huf), la conservamos en el nombre
+        extensiones_conocidas = {".pdf", ".png", ".jpg", ".zip", ".txt", ".huf"}
+        ext_origen = os.path.splitext(self.fileSelect)[1]
+        if ext_origen in extensiones_conocidas:
+            nombreFile = self.fileSelect        # foto.huf → foto.huf.HA2
+        else:
+            nombreFile = os.path.splitext(self.fileSelect)[0]
         rutaOrigen = os.path.join(self.carpetaArchivos, self.fileSelect)
         rutaDestino = os.path.join(self.carpetaArchivos, nombreFile + extensionArchivo)
 
@@ -173,7 +179,12 @@ class ProtegerController:
         if not fechaHoraLimite:     # Si no se ingresa una fecha de apertura, se cancela el proceso
             return
 
-        baseFile = os.path.splitext(self.fileSelect)[0]
+        extensiones_conocidas = {".pdf", ".png", ".jpg", ".zip", ".txt", ".huf"}
+        ext_origen = os.path.splitext(self.fileSelect)[1]
+        if ext_origen in extensiones_conocidas:
+            baseFile = self.fileSelect          # foto.huf → foto.huf.HA1
+        else:
+            baseFile = os.path.splitext(self.fileSelect)[0]
         rutaOrigen = os.path.join(self.carpetaArchivos, self.fileSelect)
         rutaDestino = os.path.join(self.carpetaArchivos, baseFile + ".HA1")
 

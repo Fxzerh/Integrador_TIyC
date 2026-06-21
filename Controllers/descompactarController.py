@@ -120,12 +120,21 @@ class DescompactarController:
                     textoOriginal = self.descomprimirTexto(strBytes)
 
                     # Guardamos el archivo descomprimido
+                    # Si el stem ya tiene una extensión conocida (ej: foto.HA2), la conservamos sin agregar .dhu
                     nombreFile = os.path.splitext(nombreArchivo)[0]
-                    with open(os.path.join(self.carpetaArchivos, nombreFile + ".dhu"), "wb") as f:
+                    extensiones_conocidas = {".pdf", ".png", ".jpg", ".zip", ".txt",
+                                             ".HA1", ".HA2", ".HA3", ".HE1", ".HE2", ".HE3",
+                                             ".H1E1", ".H1E2", ".H1E3", ".H2E1", ".H2E2", ".H2E3"}
+                    _, extStem = os.path.splitext(nombreFile)
+                    if extStem in extensiones_conocidas:
+                        archivoFinal = nombreFile          # foto.HA2.huf → foto.HA2
+                    else:
+                        archivoFinal = nombreFile + ".dhu" # foto.huf → foto.dhu
+                    with open(os.path.join(self.carpetaArchivos, archivoFinal), "wb") as f:
                         f.write(textoOriginal)
                     self.refrescarPanel()
 
-                    QMessageBox.information(self.mainWindow, "Éxito", f"Archivo comprimido con Huffman correctamente. \nGuardado en '{nombreFile}.dhu'.")                    
+                    QMessageBox.information(self.mainWindow, "Éxito", f"Archivo descomprimido correctamente. \nGuardado en '{archivoFinal}'.")                    
             else:
                 QMessageBox.warning(self.mainWindow, "Error", "El archivo no existe en la ruta especificada.")
         except Exception as e:
