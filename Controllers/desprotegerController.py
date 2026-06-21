@@ -115,8 +115,6 @@ class DesprotegerController:
     def sacarbitsSinCorregir(self, rutaFile):
         TAM_CABECERA = 19
         ext = os.path.splitext(rutaFile)[1]
-        esArchivoConError = ext in (".H1E2", ".H2E2", ".H1E3", ".H2E3")
-
         # Tamaño del bloque CODIFICADO: datos + bits de paridad que agrega aplicarHamming
         if ext in (".HA2", ".HE2", ".H1E2", ".H2E2"):
             tam_bloque = 1035   # 1024 datos + 11 paridad
@@ -143,26 +141,19 @@ class DesprotegerController:
             if len(btd) == 8:
                 decodificado.append(int(btd, 2))
 
-        # Los archivos con error conservan su extension en el nombre para no pisar el archivo original
-        base = rutaFile if esArchivoConError else os.path.splitext(rutaFile)[0]
-        extension_real = self.detectarExtension(decodificado)
-        archivoFinal = base + extension_real
-        with open(archivoFinal, "wb") as f:
-            f.write(decodificado)
+        base = os.path.splitext(rutaFile)[0]
         match ext:
             case ".HA2" | ".HE2" | ".H1E2" | ".H2E2":
-                with open(base + ".DE2", "wb") as f:
-                    f.write(decodificado)
+                archivoFinal = base + ".DE2"
             case ".HA3" | ".HE3" | ".H1E3" | ".H2E3":
-                with open(base + ".DE3", "wb") as f:
-                    f.write(decodificado)
+                archivoFinal = base + ".DE3"
+        with open(archivoFinal, "wb") as f:
+            f.write(decodificado)
         return archivoFinal
 
     def sacarbitsSinCorregir8(self, rutaFile):
         TAM_CABECERA = 19
         TAM_GRUPO = TAM_CABECERA + 2  # 19 bytes de cabecera + 2 bytes Hamming por byte original
-        ext = os.path.splitext(rutaFile)[1]
-        esArchivoConError = ext in (".H1E1", ".H2E1")
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
@@ -175,12 +166,9 @@ class DesprotegerController:
             bloque = f"{bytes_hamming[0]:08b}{bytes_hamming[1]:08b}"
             decodificado.append(int(self.sacarParidad8(bloque), 2))
 
-        base = rutaFile if esArchivoConError else os.path.splitext(rutaFile)[0]
-        extension_real = self.detectarExtension(decodificado)
-        archivoFinal = base + extension_real
+        base = os.path.splitext(rutaFile)[0]
+        archivoFinal = base + ".DE1"
         with open(archivoFinal, "wb") as f:
-            f.write(decodificado)
-        with open(base + ".DE1", "wb") as f:
             f.write(decodificado)
         return archivoFinal
 
@@ -189,8 +177,6 @@ class DesprotegerController:
     def sacarbitsCorregir8(self, rutaFile):
         TAM_CABECERA = 19
         TAM_GRUPO = TAM_CABECERA + 2
-        ext = os.path.splitext(rutaFile)[1]
-        esArchivoConError = ext in (".H1E1", ".H2E1")
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
@@ -204,20 +190,15 @@ class DesprotegerController:
             corregido = self.hamming_ver8(bloque)
             decodificado.append(int(self.sacarParidad8(corregido), 2))
 
-        base = rutaFile if esArchivoConError else os.path.splitext(rutaFile)[0]
-        extension_real = self.detectarExtension(decodificado)
-        archivoFinal = base + extension_real
+        base = os.path.splitext(rutaFile)[0]
+        archivoFinal = base + ".DC1"
         with open(archivoFinal, "wb") as f:
-            f.write(decodificado)
-        with open(base + ".DC1", "wb") as f:
             f.write(decodificado)
         return archivoFinal
 
     def sacarbitsCorregido(self, rutaFile):
         TAM_CABECERA = 19
         ext = os.path.splitext(rutaFile)[1]
-        esArchivoConError = ext in (".H1E2", ".H2E2", ".H1E3", ".H2E3")
-
         # Tamaño del bloque CODIFICADO: datos + bits de paridad que agrega aplicarHamming
         if ext in (".HA2", ".HE2", ".H1E2", ".H2E2"):
             tam_bloque = 1035   # 1024 datos + 11 paridad
@@ -253,18 +234,14 @@ class DesprotegerController:
             if len(btd) == 8:
                 decodificado.append(int(btd, 2))
 
-        base = rutaFile if esArchivoConError else os.path.splitext(rutaFile)[0]
-        extension_real = self.detectarExtension(decodificado)
-        archivoFinal = base + extension_real
-        with open(archivoFinal, "wb") as f:
-            f.write(decodificado)
+        base = os.path.splitext(rutaFile)[0]
         match ext:
             case ".HA2" | ".HE2" | ".H1E2" | ".H2E2":
-                with open(base + ".DC2", "wb") as f:
-                    f.write(decodificado)
+                archivoFinal = base + ".DC2"
             case ".HA3" | ".HE3" | ".H1E3" | ".H2E3":
-                with open(base + ".DC3", "wb") as f:
-                    f.write(decodificado)
+                archivoFinal = base + ".DC3"
+        with open(archivoFinal, "wb") as f:
+            f.write(decodificado)
         return archivoFinal
 
     def calcularSindrome(self, bloque):
@@ -285,21 +262,6 @@ class DesprotegerController:
                 sindrome |= potencia
             potencia <<= 1
         return sindrome
-
-    def detectarExtension(self, datos):
-        if datos[:4] == b'%PDF':
-            return '.pdf'
-        if datos[:8] == b'\x89PNG\r\n\x1a\n':
-            return '.png'
-        if datos[:2] == b'\xff\xd8':
-            return '.jpg'
-        if datos[:4] in (b'PK\x03\x04', b'PK\x05\x06', b'PK\x07\x08'):
-            return '.zip'
-        try:
-            datos[:512].decode('utf-8')
-            return '.txt'
-        except (UnicodeDecodeError, ValueError):
-            return '.bin'
 
     # ---- Funciones auxiliares de Hamming ----
 
