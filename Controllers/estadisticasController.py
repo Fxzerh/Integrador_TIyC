@@ -18,8 +18,8 @@ class EstadisticasController:
 
         try:
             tabla = self.mainWindow.tableFileE
-            tabla.setColumnCount(7)
-            tabla.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+            tabla.setColumnCount(5)
+            tabla.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
             tabla.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
             tabla.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
             tabla.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
@@ -30,8 +30,8 @@ class EstadisticasController:
             tabla.setHorizontalHeaderItem(2, QTableWidgetItem("Archivo Derivado"))
             tabla.setHorizontalHeaderItem(3, QTableWidgetItem("Tamaño Derivado"))
             tabla.setHorizontalHeaderItem(4, QTableWidgetItem("% Variación"))
-            tabla.setHorizontalHeaderItem(5, QTableWidgetItem("Letras Distintas"))
-            tabla.setHorizontalHeaderItem(6, QTableWidgetItem("Letras Repetidas"))
+            #tabla.setHorizontalHeaderItem(5, QTableWidgetItem("Letras Distintas"))
+            #tabla.setHorizontalHeaderItem(6, QTableWidgetItem("Letras Repetidas"))
 
             tabla.itemClicked.connect(self._onFilaClicked)
             self.cargarTabla()
@@ -41,6 +41,21 @@ class EstadisticasController:
     def refrescarPanel(self):
         self.mainWindow.tableFileE.setRowCount(0)
         self.cargarTabla()
+
+    def _ajustarAnchosProporcionales(self):
+        tabla = self.mainWindow.tableFileE
+        tabla.resizeColumnsToContents()
+
+        header = tabla.horizontalHeader()
+        widths = [header.sectionSize(i) for i in range(tabla.columnCount())]
+        total = sum(widths)
+        available = tabla.viewport().width()
+        if total <= 0 or available <= 0:
+            return
+
+        factor = max(1.0, available / total)
+        for i, width in enumerate(widths):
+            tabla.setColumnWidth(i, max(10, int(width * factor)))
 
     def _formatearTamaño(self, bytes_val):
         if bytes_val < 1024:
@@ -63,11 +78,11 @@ class EstadisticasController:
         tabla.setItem(fila, 3, QTableWidgetItem(self._formatearTamaño(tam_der)))
         tabla.setItem(fila, 4, QTableWidgetItem(pct_str))
 
-        if freq_dict is not None:
-            distintas = len(freq_dict)
-            repetidas = sum(1 for f in freq_dict.values() if f > 1)
-            tabla.setItem(fila, 5, QTableWidgetItem(str(distintas)))
-            tabla.setItem(fila, 6, QTableWidgetItem(str(repetidas)))
+        # if freq_dict is not None:
+        #     distintas = len(freq_dict)
+        #     repetidas = sum(1 for f in freq_dict.values() if f > 1)
+        #     tabla.setItem(fila, 5, QTableWidgetItem(str(distintas)))
+        #     tabla.setItem(fila, 6, QTableWidgetItem(str(repetidas)))
 
     def _leerDicHuf(self, path):
         try:
@@ -183,3 +198,5 @@ class EstadisticasController:
                 if f_stem == stem and HA_EXT_RE.match(f_ext):
                     tam_ha = os.path.getsize(os.path.join(self.carpetaArchivos, f))
                     self._agregarFila(original, tam_orig, f, tam_ha)
+
+        self._ajustarAnchosProporcionales()
