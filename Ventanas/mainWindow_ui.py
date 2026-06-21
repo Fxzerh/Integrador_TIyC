@@ -682,14 +682,14 @@ class Ui_MainWindow(object):
         self.tableFileDP.setObjectName(u"tableFileDP")
         self.tableFileDP.horizontalHeader().setStretchLastSection(False)
 
-        self.gridLayout_8.addWidget(self.tableFileDP, 3, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.tableFileDP, 3, 0, 3, 1)
 
         self.subirArchivoDP_btn = QPushButton(self.desprotegerPanel)
         self.subirArchivoDP_btn.setObjectName(u"subirArchivoDP_btn")
         self.subirArchivoDP_btn.setMinimumSize(QSize(200, 60))
         self.subirArchivoDP_btn.setFont(font7)
 
-        self.gridLayout_8.addWidget(self.subirArchivoDP_btn, 5, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        self.gridLayout_8.addWidget(self.subirArchivoDP_btn, 7, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.horizontalSpacer_8 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
@@ -707,7 +707,7 @@ class Ui_MainWindow(object):
 
         self.verticalSpacer_3 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.gridLayout_8.addItem(self.verticalSpacer_3, 4, 0, 1, 3)
+        self.gridLayout_8.addItem(self.verticalSpacer_3, 6, 0, 1, 3)
 
         self.label_19 = QLabel(self.desprotegerPanel)
         self.label_19.setObjectName(u"label_19")
@@ -719,21 +719,21 @@ class Ui_MainWindow(object):
         self.viewDP.setObjectName(u"viewDP")
         self.viewDP.setUrl(QUrl(u"about:blank"))
 
-        self.gridLayout_8.addWidget(self.viewDP, 3, 2, 1, 3)
+        self.gridLayout_8.addWidget(self.viewDP, 3, 2, 3, 3)
 
         self.desprotegerArchivoSC_btn = QPushButton(self.desprotegerPanel)
         self.desprotegerArchivoSC_btn.setObjectName(u"desprotegerArchivoSC_btn")
         self.desprotegerArchivoSC_btn.setMinimumSize(QSize(300, 60))
         self.desprotegerArchivoSC_btn.setFont(font7)
 
-        self.gridLayout_8.addWidget(self.desprotegerArchivoSC_btn, 5, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        self.gridLayout_8.addWidget(self.desprotegerArchivoSC_btn, 7, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.desprotegerArchivoC_btn = QPushButton(self.desprotegerPanel)
         self.desprotegerArchivoC_btn.setObjectName(u"desprotegerArchivoC_btn")
         self.desprotegerArchivoC_btn.setMinimumSize(QSize(300, 60))
         self.desprotegerArchivoC_btn.setFont(font7)
 
-        self.gridLayout_8.addWidget(self.desprotegerArchivoC_btn, 5, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        self.gridLayout_8.addWidget(self.desprotegerArchivoC_btn, 7, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.label_17 = QLabel(self.desprotegerPanel)
         self.label_17.setObjectName(u"label_17")
@@ -742,8 +742,9 @@ class Ui_MainWindow(object):
 
         self.gridLayout_8.addWidget(self.label_17, 0, 0, 1, 4)
 
-        self.gridLayout_8.setRowStretch(3, 3)
+        self.gridLayout_8.setRowStretch(3, 2)
         self.gridLayout_8.setRowStretch(5, 2)
+        self.gridLayout_8.setRowStretch(7, 2)
         self.gridLayout_8.setColumnStretch(0, 2)
         self.gridLayout_8.setColumnStretch(2, 1)
         self.gridLayout_8.setColumnStretch(3, 1)
