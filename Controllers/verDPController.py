@@ -28,7 +28,7 @@ class VerDPController:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo cargar la tabla: {str(e)}")
 
         # ---------------------------- ACCIONES Y EVENTOS ---------------------------------------------------------------------------------------------------------
-        #self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrarArchivo())
+        self.mainWindow.tableFileVDP.itemClicked.connect(self.mostrar)
         self.mainWindow.sinCorregirVDP_btn.clicked.connect(lambda: self.mostrarArchivo(False))
         self.mainWindow.corregidoVDP_btn.clicked.connect(lambda: self.mostrarArchivo(True))
         self.mainWindow.m8VDP_btn.clicked.connect(lambda: self.mostrarDesprotegido(1))
@@ -53,7 +53,7 @@ class VerDPController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                if fileType in [".txt",".pdf",".jpg",".png",".zip"]:
+                if True:
                     file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
                     if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
                         # Obtenemos el tamaño de f
@@ -81,6 +81,17 @@ class VerDPController:
             return nombreArchivo
         return None
     
+    def mostrar(self):
+        nombreArchivo = self.obtenerSeleccionado()
+        if not nombreArchivo:
+            QMessageBox.warning(self.mainWindow, "Aviso", "No se ha seleccionado ningún archivo.")
+            return
+        nombre = os.path.splitext(nombreArchivo)[0]
+        rutaCompleta = os.path.join(self.carpetaArchivos, nombreArchivo)
+        if os.path.exists(rutaCompleta):
+            url_local = QUrl.fromLocalFile(rutaCompleta)       # Transformamos la ruta del archivo original a una URL que entienda el componente web        
+            self.mainWindow.viewVDP_O.setUrl(url_local)        # Setteamos la vista web que lo dibuje en pantalla
+    
     def mostrarArchivo(self, corregir):
         nombreArchivo = self.obtenerSeleccionado()
         if not nombreArchivo:
@@ -89,31 +100,25 @@ class VerDPController:
         nombre = os.path.splitext(nombreArchivo)[0]
         rutaCompleta = os.path.join(self.carpetaArchivos, nombreArchivo)
         if os.path.exists(rutaCompleta):
+            self.mainWindow.m8VDP_btn.setEnabled(True)
+            self.mainWindow.m1024VDP_btn.setEnabled(True)
+            self.mainWindow.m16384VDP_btn.setEnabled(True)
             if corregir:
                 self.corregido = True
-                self.mainWindow.m8VDP_btn.setEnabled(True)
-                self.mainWindow.m1024VDP_btn.setEnabled(True)
-                self.mainWindow.m16384VDP_btn.setEnabled(True)
                 for i in range(1,4):
-                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DC" + str(i))
+                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + f".DC{i}")
                     if os.path.exists(rutaRecuperado):
-                        url_local1 = QUrl.fromLocalFile(rutaCompleta)       # Transformamos la ruta del archivo original a una URL que entienda el componente web        
-                        url_local2 = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
-                        self.mainWindow.viewVDP_O.setUrl(url_local1)        # Setteamos la vista web que lo dibuje en pantalla
-                        self.mainWindow.viewVDP_R.setUrl(url_local2)
+                        print(f"hola: {os.path.basename(rutaRecuperado)}")
+                        url_local = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
+                        self.mainWindow.viewVDP_R.setUrl(url_local)
                         break
             else:
                 self.corregido = False
-                self.mainWindow.m8VDP_btn.setEnabled(True)
-                self.mainWindow.m1024VDP_btn.setEnabled(True)
-                self.mainWindow.m16384VDP_btn.setEnabled(True)
                 for i in range(1,4):
-                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DE" + str(i))
+                    rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + f".DE{i}")
                     if os.path.exists(rutaRecuperado):
-                        url_local1 = QUrl.fromLocalFile(rutaCompleta)       # Transformamos la ruta del archivo original a una URL que entienda el componente web        
-                        url_local2 = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
-                        self.mainWindow.viewVDP_O.setUrl(url_local1)        # Setteamos la vista web que lo dibuje en pantalla
-                        self.mainWindow.viewVDP_R.setUrl(url_local2)
+                        url_local = QUrl.fromLocalFile(rutaRecuperado)     # Transformamos la ruta del archivo recuperado a una URL que entienda el componente web
+                        self.mainWindow.viewVDP_R.setUrl(url_local)
                         break
     
     def mostrarDesprotegido(self, modulo):
@@ -125,10 +130,10 @@ class VerDPController:
         rutaCompleta = os.path.join(self.carpetaArchivos, nombreArchivo)
         if os.path.exists(rutaCompleta):
             if self.corregido:
-                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DC" + modulo)
+                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + f".DC{modulo}")
                 url_local = QUrl.fromLocalFile(rutaRecuperado)
                 self.mainWindow.viewVDP_R.setUrl(url_local)
             else:
-                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + ".DE" + modulo)
+                rutaRecuperado = os.path.join(self.carpetaArchivos, nombre + f".DE{modulo}")
                 url_local = QUrl.fromLocalFile(rutaRecuperado)
                 self.mainWindow.viewVDP_R.setUrl(url_local)
