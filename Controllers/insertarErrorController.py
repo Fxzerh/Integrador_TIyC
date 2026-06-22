@@ -80,6 +80,52 @@ class InsertarErrorController:
             url_local = QUrl.fromLocalFile(ruta_completa)   # Transformamos la ruta de Windows a una URL que entienda el componente web        
             self.mainWindow.viewIE.setUrl(url_local)         # Setteamos la vista web que lo dibuje en pantalla
     
+    def _modificarBitsEnBloques(self, rutaFile, cantErroresPorBloque):
+        TAM_CABECERA = 30
+        extension = os.path.splitext(rutaFile)[1]
+        probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
+        prob = probabilidades[extension]
+
+        with open(rutaFile, "rb") as archivo:
+            contenido = archivo.read()
+        datos = bytearray(contenido)
+
+        if extension == ".HA1":
+            # Cada par de bytes = 2 bloques Hamming(7,4) alineados: se trabaja a nivel de bytes directamente
+            for i in range(TAM_CABECERA, len(datos), 2):
+                limite = min(i + 2, len(datos))
+                if random.random() < prob:
+                    byteError = random.randint(i, limite - 1)
+                    bitError = random.randint(0, 7)
+                    datos[byteError] ^= (1 << bitError)
+        else:
+            # HA2/HA3: los bloques Hamming no están alineados a bytes (1035 y 16399 bits).
+            # Se trabaja a nivel de bits para garantizar exactamente 1 o 2 errores por bloque.
+            tam_bloque_bits = 1035 if extension == ".HA2" else 16399
+            header = bytes(datos[:TAM_CABECERA])
+            data_bytes = datos[TAM_CABECERA:]
+            bits = list("".join(f"{byte:08b}" for byte in data_bytes))
+
+            for blk_start in range(0, len(bits), tam_bloque_bits):
+                blk_end = blk_start + tam_bloque_bits
+                if blk_end > len(bits):
+                    break
+                if random.random() < prob:
+                    posiciones = random.sample(range(blk_start, blk_end), cantErroresPorBloque)
+                    for pos in posiciones:
+                        bits[pos] = '1' if bits[pos] == '0' else '0'
+
+            bits_str = "".join(bits)
+            new_data = bytearray()
+            for i in range(0, len(bits_str), 8):
+                chunk = bits_str[i:i + 8]
+                if len(chunk) < 8:
+                    chunk = chunk.ljust(8, '0')
+                new_data.append(int(chunk, 2))
+            datos = bytearray(header) + new_data
+
+        return datos
+
     def insertar1Error(self):
         nombreArchivo = self.obtenerSeleccionado()
         if not nombreArchivo:
@@ -91,26 +137,7 @@ class InsertarErrorController:
             QMessageBox.warning(self.mainWindow, "Aviso", "El archivo seleccionado no es un archivo Hamminizado.")
             return
         try:
-            with open(rutaFile, "rb") as archivo:
-                contenido = archivo.read()
-            datos = bytearray(contenido)
-            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
-            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
-            probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
-
-            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
-            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
-
-            # Insertamos el error saltandonos el header con la fecha de apertura
-            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
-                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
-                if random.random() < prob:
-                    # Elegimos el bit a modificar
-                    byteError = random.randint(i, limite - 1)
-                    bitError = random.randint(0, 7)
-                    # Invertimos el bit de la posicion elegida
-                    datos[byteError] ^= (1 << bitError)
-            # Guardamos el nuevo archivo con el error insertado
+            datos = self._modificarBitsEnBloques(rutaFile, 1)
             match extension:
                 case ".HA1":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E1"
@@ -118,14 +145,13 @@ class InsertarErrorController:
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E2"
                 case ".HA3":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H1E3"
-            
             with open(archivoFinal, "wb") as archivoSalida:
                 archivoSalida.write(datos)
             QMessageBox.information(self.mainWindow, "Éxito", f"Inserción de error completada. \nArchivo guardado como: {os.path.basename(archivoFinal)}")
             self.refrescarPanel()
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo insertar el error: {str(e)}")
-    
+
     def insertar2Errores(self):
         nombreArchivo = self.obtenerSeleccionado()
         if not nombreArchivo:
@@ -137,34 +163,7 @@ class InsertarErrorController:
             QMessageBox.warning(self.mainWindow, "Aviso", "El archivo seleccionado no es un archivo Hamminizado.")
             return
         try:
-            with open(rutaFile, "rb") as archivo:
-                contenido = archivo.read()
-            datos = bytearray(contenido)
-            # Definimos los tamaño de los bloques (en bytes) y sus probabilidades segun su extension
-            tamañosBloques = {".HA1": 2, ".HA2": 128, ".HA3": 2048}
-            probabilidades = {".HA1": 0.3, ".HA2": 0.5, ".HA3": 0.75}
-
-            tamañoBloque = tamañosBloques[extension]        # Tamaño de bloque del archivo actual
-            prob = probabilidades[extension]                # Probabilidad de error del archivo actual
-
-            # Insertamos el error saltandonos el header con la fecha de apertura
-            for i in range(19, len(datos), tamañoBloque):       # Por cada byte se analiza si se inserta un error o no
-                limite = min(i + tamañoBloque, len(datos))      # Para no pasarnos del final del archivo
-                if random.random() < prob:
-                # Primer error
-                    # Elegimos el bit a modificar
-                    byteError1 = i
-                    bitError1 = 2   # Bit de dato
-                    # Invertimos el bit de la posicion elegida
-                    datos[byteError1] ^= (1 << bitError1)
-                # Segundo Error
-                    # Elegimos el bit a modificar
-                    byteError2 = i
-                    bitError2 = 5   # Bit de dato
-                    # Invertimos el bit de la posicion elegida
-                    datos[byteError2] ^= (1 << bitError2)
-
-            # Guardamos el nuevo archivo con el error insertado
+            datos = self._modificarBitsEnBloques(rutaFile, 2)
             match extension:
                 case ".HA1":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E1"
@@ -172,7 +171,6 @@ class InsertarErrorController:
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E2"
                 case ".HA3":
                     archivoFinal = os.path.splitext(rutaFile)[0] + ".H2E3"
-            
             with open(archivoFinal, "wb") as archivoSalida:
                 archivoSalida.write(datos)
             QMessageBox.information(self.mainWindow, "Éxito", f"Inserción de error completada. \nArchivo guardado como: {os.path.basename(archivoFinal)}")

@@ -155,7 +155,8 @@ class ProtegerController:
 
             # Guardamos en el archivo de texto usando espacios como separadores
             with open(rutaDestino, 'wb') as archivoSalida:
-                archivoSalida.write(fechaHoraLimite.encode('utf-8'))
+                cabecera = f"{fechaHoraLimite}|{len(contenidoBytes):010d}"
+                archivoSalida.write(cabecera.encode('utf-8'))
                 archivoSalida.write(bloquesHamming)
 
             QMessageBox.information(self.mainWindow, "Éxito", f"Archivo protegido correctamente.\nGuardado en '{nombreFile}{extensionArchivo}'.")
@@ -182,7 +183,8 @@ class ProtegerController:
                 contenidoBytes = archivo.read()
 
             with open(rutaDestino, 'wb') as archivoSalida:
-                archivoSalida.write(fechaHoraLimite.encode('utf-8'))
+                cabecera = f"{fechaHoraLimite}|{len(contenidoBytes):010d}"
+                archivoSalida.write(cabecera.encode('utf-8'))
                 for byte in contenidoBytes:
                     bloqueBits = f"{byte:08b}"
                     # Dividimos el bloque de 8 bits en 2 mitades de 4 bits

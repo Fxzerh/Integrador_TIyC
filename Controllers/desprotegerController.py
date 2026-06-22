@@ -128,7 +128,7 @@ class DesprotegerController:
     # ---- Deshamminizar sin corregir ----
 
     def sacarbitsSinCorregir(self, rutaFile):
-        TAM_CABECERA = 19
+        TAM_CABECERA = 30  # date(19) + '|' + size(10)
         ext = os.path.splitext(rutaFile)[1]
         # Tamaño del bloque CODIFICADO: datos + bits de paridad que agrega aplicarHamming
         if ext in (".HA2", ".HE2", ".H1E2", ".H2E2"):
@@ -140,6 +140,7 @@ class DesprotegerController:
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        tam_original = int(datos_brutos[20:30].decode("utf-8"))  # Tamaño original del archivo
         datos_brutos = datos_brutos[TAM_CABECERA:]  # Saltamos el encabezado con la fecha de apertura
         cadena_bits = "".join(f"{byte:08b}" for byte in datos_brutos)
 
@@ -155,6 +156,7 @@ class DesprotegerController:
             btd = l1[k:k + 8]
             if len(btd) == 8:
                 decodificado.append(int(btd, 2))
+        decodificado = decodificado[:tam_original]  # Eliminar bytes nulos del relleno
 
         base = os.path.splitext(rutaFile)[0]
         match ext:
@@ -167,7 +169,7 @@ class DesprotegerController:
         return archivoFinal
 
     def sacarbitsSinCorregir8(self, rutaFile):
-        TAM_CABECERA = 19
+        TAM_CABECERA = 30  # date(19) + '|' + size(10)
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
@@ -189,7 +191,7 @@ class DesprotegerController:
     # ---- Deshamminizar corrigiendo ----
 
     def sacarbitsCorregir8(self, rutaFile):
-        TAM_CABECERA = 19
+        TAM_CABECERA = 30  # date(19) + '|' + size(10)
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
@@ -210,7 +212,7 @@ class DesprotegerController:
         return archivoFinal
 
     def sacarbitsCorregido(self, rutaFile):
-        TAM_CABECERA = 19
+        TAM_CABECERA = 30  # date(19) + '|' + size(10)
         ext = os.path.splitext(rutaFile)[1]
         # Tamaño del bloque CODIFICADO: datos + bits de paridad que agrega aplicarHamming
         if ext in (".HA2", ".HE2", ".H1E2", ".H2E2"):
@@ -222,6 +224,7 @@ class DesprotegerController:
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        tam_original = int(datos_brutos[20:30].decode("utf-8"))  # Tamaño original del archivo
         datos_brutos = datos_brutos[TAM_CABECERA:]  # Saltamos el encabezado con la fecha de apertura
         cadena_bits = "".join(f"{byte:08b}" for byte in datos_brutos)
 
@@ -246,6 +249,7 @@ class DesprotegerController:
             btd = l1[k:k + 8]
             if len(btd) == 8:
                 decodificado.append(int(btd, 2))
+        decodificado = decodificado[:tam_original]  # Eliminar bytes nulos del relleno
 
         base = os.path.splitext(rutaFile)[0]
         match ext:
