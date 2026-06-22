@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QTableWidget, QMessageBox, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import QUrl
 from Clases.cargarArchivo import Cargar
+from datetime import datetime
 import os
 
 
@@ -80,6 +81,8 @@ class DesprotegerController:
             return
         rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
         ext = os.path.splitext(rutaFile)[1]
+        if not self.verificarFecha(rutaFile):
+            return
         try:
             if ext in (".HA1", ".HE1", ".H1E1", ".H2E1"):
                 archivoFinal = self.sacarbitsSinCorregir8(rutaFile)
@@ -97,6 +100,8 @@ class DesprotegerController:
             return
         rutaFile = os.path.join(self.carpetaArchivos, nombreArchivo)
         ext = os.path.splitext(rutaFile)[1]
+        if not self.verificarFecha(rutaFile):
+            return
         if ext in (".H2E1", ".H2E2", ".H2E3"):
             QMessageBox.warning(self.mainWindow, "Aviso", "Este archivo contiene 2 errores por bloque y no puede ser corregido ni desprotegido.")
             return
@@ -109,6 +114,16 @@ class DesprotegerController:
             QMessageBox.information(self.mainWindow, "Éxito", f"Archivo desprotegido correctamente. \nGuardado en '{os.path.basename(archivoFinal)}'.")
         except Exception as e:
             QMessageBox.critical(self.mainWindow, "Error", f"No se pudo desproteger el archivo: {str(e)}")
+
+    def verificarFecha(self, rutaFile):
+        with open(rutaFile, "rb") as f:
+            cabecera = f.read(19).decode("utf-8")
+        fechaLimite = datetime.strptime(cabecera, "%Y-%m-%d %H:%M:%S")
+        if datetime.now() < fechaLimite:
+            QMessageBox.warning(self.mainWindow, "Acceso Denegado",
+                                f"El archivo no puede ser decodificado antes de:\n{fechaLimite.strftime('%Y-%m-%d %H:%M:%S')}")
+            return False
+        return True
 
     # ---- Deshamminizar sin corregir ----
 
@@ -153,17 +168,16 @@ class DesprotegerController:
 
     def sacarbitsSinCorregir8(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2  # 19 bytes de cabecera + 2 bytes Hamming por byte original
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        datos_brutos = datos_brutos[TAM_CABECERA:]  # saltar cabecera una sola vez
         decodificado = bytearray()
-        for c in range(0, len(datos_brutos), TAM_GRUPO):
-            grupo = datos_brutos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
+        for c in range(0, len(datos_brutos), 2):
+            par = datos_brutos[c:c + 2]
+            if len(par) < 2:
                 break
-            bytes_hamming = grupo[TAM_CABECERA:]  # Saltamos los 19 bytes de cabecera
-            bloque = f"{bytes_hamming[0]:08b}{bytes_hamming[1]:08b}"
+            bloque = f"{par[0]:08b}{par[1]:08b}"
             decodificado.append(int(self.sacarParidad8(bloque), 2))
 
         base = os.path.splitext(rutaFile)[0]
@@ -176,17 +190,16 @@ class DesprotegerController:
 
     def sacarbitsCorregir8(self, rutaFile):
         TAM_CABECERA = 19
-        TAM_GRUPO = TAM_CABECERA + 2
 
         with open(rutaFile, "rb") as f:
             datos_brutos = f.read()
+        datos_brutos = datos_brutos[TAM_CABECERA:]  # saltar cabecera una sola vez
         decodificado = bytearray()
-        for c in range(0, len(datos_brutos), TAM_GRUPO):
-            grupo = datos_brutos[c:c + TAM_GRUPO]
-            if len(grupo) < TAM_GRUPO:
+        for c in range(0, len(datos_brutos), 2):
+            par = datos_brutos[c:c + 2]
+            if len(par) < 2:
                 break
-            bytes_hamming = grupo[TAM_CABECERA:]
-            bloque = f"{bytes_hamming[0]:08b}{bytes_hamming[1]:08b}"
+            bloque = f"{par[0]:08b}{par[1]:08b}"
             corregido = self.hamming_ver8(bloque)
             decodificado.append(int(self.sacarParidad8(corregido), 2))
 
