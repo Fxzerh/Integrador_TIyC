@@ -51,7 +51,7 @@ class DescompactarController:
             files = os.listdir(self.carpetaArchivos)
             for f in files:
                 fileType = os.path.splitext(f)[1]
-                if fileType in [".huf"]:
+                if fileType in [".huf",".DE1",".DC1",".DE2",".DE3",".DC3",".DC2"]:
                     file_path = os.path.join(self.carpetaArchivos, f)   # Ruta completa del archivo f
                     if os.path.isfile(file_path):  # Pregunta si f es un archivo (y no una carpeta)
                         # Obtenemos el tamaño de f
